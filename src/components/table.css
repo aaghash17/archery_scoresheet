@@ -1,0 +1,221 @@
+.table-scoresheet,
+.table-scoresheet * {
+  box-sizing: border-box;
+}
+.table-scoresheet {
+  width: 360px;
+  height: 546px;
+  position: relative;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.table-heading {
+  width: 360px;
+  height: 78px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+.table-heading1,
+.table-heading2,
+.table-total {
+  display: flex;
+  flex-direction: row;
+  gap: 0px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  position: absolute;
+}
+.table-heading1 {
+  width: 360px;
+  height: 78px;
+  left: 0px;
+  top: 0px;
+}
+.table-heading2 {
+  width: 216px;
+  height: 39px;
+  left: 72px;
+  top: 39px;
+}
+.table-total {
+  width: 360px;
+  height: 39px;
+  left: 0px;
+  top: 546px;
+}
+.table-data {
+  width: 360px;
+  height: 390px;
+  position: absolute;
+  left: 0px;
+  top: 78px;
+}
+
+.frame-1,
+.frame-2,
+.frame-3,
+.frame-4,
+.frame-18,
+.frame-19 {
+  background: #ffffff;
+  border-style: solid;
+  border-color: #808080;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+}
+.frame-1 {
+  border-width: 1px 0px 0px 1px;
+  width: 72px;
+  height: 78px;
+}
+.frame-2 {
+  border-width: 1px 0px 0px 1px;
+  width: 216px;
+  height: 39px;
+}
+.frame-3 {
+  border-width: 1px 1px 0px 1px;
+  width: 72px;
+  height: 78px;
+}
+.frame-4 {
+  border-width: 1px 0px 0px 1px;
+  width: 72px;
+  height: 39px;
+}
+.frame-18 {
+  border-width: 1px 0px 1px 1px;
+  flex-shrink: 0;
+  width: 258px;
+  height: 39px;
+}
+.frame-19 {
+  border-width: 1px;
+  width: 102px;
+  height: 39px;
+}
+
+._text {
+  color: #000000;
+  text-align: center;
+  font: 500 14px/130% "Lato", sans-serif;
+  position: relative;
+}
+
+.row-1,
+.row-2,
+.row-3,
+.row-4,
+.row-5,
+.row-6,
+.row-7,
+.row-8,
+.row-9,
+.row-10,
+.row-11,
+.row-12 {
+  display: flex;
+  flex-direction: row;
+  gap: 0px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 360px;
+  height: 39px;
+  position: absolute;
+  left: 0px;
+}
+.row-1 {
+  top: 0px;
+}
+.row-2 {
+  top: 39px;
+}
+.row-3 {
+  top: 78px;
+}
+.row-4 {
+  top: 117px;
+}
+.row-5 {
+  top: 156px;
+}
+.row-6 {
+  top: 195px;
+}
+.row-7 {
+  top: 234px;
+}
+.row-8 {
+  top: 273px;
+}
+.row-9 {
+  top: 312px;
+}
+.row-10 {
+  top: 351px;
+}
+.row-11 {
+  top: 390px;
+}
+.row-12 {
+  top: 429px;
+}
+
+.c-sno,
+.c-1,
+.c-2,
+.c-3,
+.c-sum {
+  background: #ffffff;
+  border-style: solid;
+  border-color: #808080;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 72px;
+  height: 39px;
+  position: relative;
+}
+
+.c-sno {
+  border-width: 1px 0px 0px 1px;
+}
+.c-1 {
+  border-width: 1px 0px 0px 1px;
+}
+.c-2 {
+  border-width: 1px 0px 0px 1px;
+}
+.c-3 {
+  border-width: 1px 0px 0px 1px;
+}
+.c-sum {
+  border-width: 1px 1px 0px 1px;
+}
+
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  padding: 2px 2px;
+  box-sizing: border-box;
+  border: none;
+  text-align: center;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

@@ -1,0 +1,125 @@
+/*---------background layout------------*/
+
+.mobile,
+.mobile * {
+  box-sizing: border-box;
+}
+.mobile {
+  background: rgba(241, 240, 237, 0.75);
+  width: 390px;
+  height: 844px;
+  position: relative;
+  overflow: hidden;
+}
+
+/*---------heading------------*/
+
+.header {
+  color: #004586;
+  text-align: center;
+  font: 200 16px "Lato", sans-serif;
+  position: relative;
+  padding: 0px 5px;
+}
+
+/*---------select button------------*/
+
+.custom-select {
+  text-align: center;
+}
+
+select {
+  border: none;
+  padding: 5px 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 0.5rem 0.8rem #00000080;
+}
+
+select:focus {
+  outline: none;
+}
+
+/*---------tab selection------------*/
+.warpper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 20px;
+}
+
+.tab {
+  cursor: pointer;
+  padding: 10px 20px;
+  margin: 0px 5px;
+  background: #32557f;
+  display: inline-block;
+  color: #fff;
+  border-radius: 3px 3px 3px 3px;
+  box-shadow: 0 0.5rem 0.8rem #00000080;
+}
+/*.panels {
+  background: #fff;
+  box-shadow: 0 2rem 2rem #00000080;
+  min-height: 200px;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 3px;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.panel {
+  display: none;
+  animation: fadein 0.8s;
+}
+*/
+
+/*@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}*/
+
+.radio {
+  display: none;
+}
+
+#one:checked ~ .tabs #one-tab,
+#two:checked ~ .tabs #two-tab,
+#three:checked ~ .tabs #three-tab,
+#four:checked ~ .tabs #four-tab {
+  background: #fff;
+  color: #000;
+  border-top: 3px solid #32557f;
+}
+
+/*---------person details------------*/
+.person-details {
+  position: relative;
+  display: flex;
+}
+
+.group-1 {
+  flex: 50%;
+}
+.group-1-text {
+  color: #000000;
+  text-align: right;
+  font: 500 16px "Lato", sans-serif;
+  position: relative;
+  margin-top: 2%;
+}
+.group-2 {
+  flex: 50%;
+}
+.group-2-text {
+  color: #000000;
+  text-align: left;
+  font: 500 16px "Lato", sans-serif;
+  position: relative;
+  margin-top: 2%;
+}
