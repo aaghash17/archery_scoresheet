@@ -6,24 +6,35 @@ import { useState } from "react";
 
 const ImportCSV = ({ onImport }) => {
   const [file, setFile] = useState(null);
+  const [filename, setFileName] = useState(null);
+  const [error, setError] = useState(null); // State to hold error messages
 
   const handleFileChange = (event) => {
-    setFile(event.target.files[0]); // Store the file
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setFileName(selectedFile.filename); // Use .name to get the file name
+      setError(null); // Clear any previous error
+    }
   };
 
   const handleImport = () => {
-    if (file) {
-      Papa.parse(file, {
-        header: true,
-        skipEmptyLines: true,
-        complete: (results) => {
-          importData(results.data);
-        },
-        error: (error) => {
-          console.error("Error reading CSV file:", error);
-        },
-      });
+    if (!file) {
+      setError("Please select a CSV file before importing.");
+      return; // Exit the function if no file is selected
     }
+
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        importData(results.data);
+      },
+      error: (error) => {
+        console.error("Error reading CSV file:", error);
+        setError("Error reading CSV file. Please try again.");
+      },
+    });
   };
 
   const importData = (data) => {
@@ -44,9 +55,17 @@ const ImportCSV = ({ onImport }) => {
       .then(() => {
         console.log("Data imported successfully");
         if (onImport) onImport(); // Refresh or update the table
+
+        // Reset file and filename state
+        setFile(null);
+        setFileName(null);
+
+        // Reset file input field
+        document.querySelector('input[type="file"]').value = null;
       })
       .catch((error) => {
         console.error("Error importing data:", error);
+        setError("Error importing data. Please try again.");
       });
   };
 
@@ -59,7 +78,7 @@ const ImportCSV = ({ onImport }) => {
           accept=".csv"
           onChange={handleFileChange}
           className="form-control mb-2"
-          key={file ? file.name : "default"} // Reset input value when file changes
+          key={filename ? filename : "default"}
         />
         <button
           onClick={handleImport}
@@ -69,6 +88,8 @@ const ImportCSV = ({ onImport }) => {
           Import
         </button>
       </div>
+      {error && <div className="alert alert-danger mt-3">{error}</div>}{" "}
+      {/* Display error message */}
     </>
   );
 };

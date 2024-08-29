@@ -65,7 +65,7 @@ const DbTable = () => {
           }));
           setData(formattedData);
         } else {
-          initializeData();
+          setData([]); // Set to an empty array if no data
         }
       },
       (error) => {
@@ -76,56 +76,6 @@ const DbTable = () => {
 
     return () => unsubscribe();
   }, []);
-
-  const initializeData = () => {
-    const defaultRow = {
-      tboard: "",
-      tplayer: "",
-      name: "",
-      district: "",
-      age: "",
-      sex: "",
-      bow: "",
-      total: 0,
-      d11: "",
-      d12: "",
-      d13: "",
-      d21: "",
-      d22: "",
-      d23: "",
-      d31: "",
-      d32: "",
-      d33: "",
-      d41: "",
-      d42: "",
-      d43: "",
-      d51: "",
-      d52: "",
-      d53: "",
-      d61: "",
-      d62: "",
-      d63: "",
-      d71: "",
-      d72: "",
-      d73: "",
-      d81: "",
-      d82: "",
-      d83: "",
-      d91: "",
-      d92: "",
-      d93: "",
-      d101: "",
-      d102: "",
-      d103: "",
-    };
-    const dataRef = ref(db, DATA_PATH);
-    push(dataRef, defaultRow)
-      .then(() => console.log("Initialized default data"))
-      .catch((error) => {
-        setError("Error initializing data: " + error.message);
-        console.error("Error initializing data:", error);
-      });
-  };
 
   const handleAddRow = () => {
     const newRow = {
@@ -192,7 +142,10 @@ const DbTable = () => {
   const handleRemoveAllRows = () => {
     const dataRef = ref(db, DATA_PATH);
     remove(dataRef)
-      .then(() => console.log("Removed all rows"))
+      .then(() => {
+        console.log("Removed all rows");
+        setData([]); // Clear local state after removal
+      })
       .catch((error) => {
         setError("Error removing all rows: " + error.message);
         console.error("Error removing all rows:", error);
