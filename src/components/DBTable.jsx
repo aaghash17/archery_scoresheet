@@ -1,7 +1,7 @@
 // src/TableComponent.jsx
 import { useEffect, useState } from "react";
 import { ref, onValue, update, push, remove } from "firebase/database";
-import { db } from "../firebase/firebaseConfig";
+import { db, DATA_PATH } from "../firebase/firebaseConfig";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/DBTable.css";
@@ -53,7 +53,7 @@ const DBTable = () => {
   ];
 
   useEffect(() => {
-    const dataRef = ref(db, "data");
+    const dataRef = ref(db, DATA_PATH);
 
     const unsubscribe = onValue(
       dataRef,
@@ -119,7 +119,7 @@ const DBTable = () => {
       d102: "",
       d103: "",
     };
-    const dataRef = ref(db, "data");
+    const dataRef = ref(db, DATA_PATH);
     push(dataRef, defaultRow)
       .then(() => console.log("Initialized default data"))
       .catch((error) => {
@@ -169,7 +169,7 @@ const DBTable = () => {
       d102: "",
       d103: "",
     };
-    const newRowRef = ref(db, "data");
+    const newRowRef = ref(db, DATA_PATH);
     push(newRowRef, newRow)
       .then(() => console.log("Added new row"))
       .catch((error) => {
@@ -180,7 +180,7 @@ const DBTable = () => {
 
   const handleRemoveSelectedRows = () => {
     selectedRows.forEach((id) => {
-      remove(ref(db, `data/${id}`))
+      remove(ref(db, `${DATA_PATH}/${id}`))
         .then(() => console.log(`Removed row with id ${id}`))
         .catch((error) => {
           setError("Error removing row: " + error.message);
@@ -191,7 +191,7 @@ const DBTable = () => {
   };
 
   const handleRemoveAllRows = () => {
-    const dataRef = ref(db, "data");
+    const dataRef = ref(db, DATA_PATH);
     remove(dataRef)
       .then(() => console.log("Removed all rows"))
       .catch((error) => {
@@ -209,7 +209,7 @@ const DBTable = () => {
   };
 
   const handleEdit = (id, field, value) => {
-    const dataRef = ref(db, `data/${id}`);
+    const dataRef = ref(db, `${DATA_PATH}/${id}`);
     update(dataRef, { [field]: value })
       .then(() => console.log(`Updated ${field} for row ${id}`))
       .catch((error) => {

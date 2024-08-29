@@ -1,6 +1,6 @@
 import Papa from "papaparse";
 import { ref, get } from "firebase/database";
-import { db } from "../firebase/firebaseConfig";
+import { db, DATA_PATH } from "../firebase/firebaseConfig";
 
 const columnOrder = [
   "tboard",
@@ -45,7 +45,7 @@ const columnOrder = [
 
 const ExportCSV = () => {
   const handleExport = () => {
-    const dataRef = ref(db, "data");
+    const dataRef = ref(db, DATA_PATH);
 
     get(dataRef)
       .then((snapshot) => {

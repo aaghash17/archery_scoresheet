@@ -1,8 +1,8 @@
 // firebaseService.js
 import { ref, onValue, set } from "firebase/database";
-import { db } from "../firebase/firebaseConfig";
+import { db, EVENT_PATH } from "../firebase/firebaseConfig";
 
-const getEventRef = () => ref(db, "archeryscoresheet/event");
+const getEventRef = () => ref(db, EVENT_PATH);
 
 export const setEventNameData = async (eventName) => {
   try {
