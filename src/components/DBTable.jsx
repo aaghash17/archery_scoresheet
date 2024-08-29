@@ -2,8 +2,7 @@
 import { useEffect, useState } from "react";
 import { ref, onValue, update, push, remove } from "firebase/database";
 import { db } from "../firebase/firebaseConfig";
-import ImportCSV from "./ImportCSV";
-import ExportCSV from "./ExportCSV";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/DBTable.css";
 
@@ -191,6 +190,16 @@ const DBTable = () => {
     setSelectedRows([]);
   };
 
+  const handleRemoveAllRows = () => {
+    const dataRef = ref(db, "data");
+    remove(dataRef)
+      .then(() => console.log("Removed all rows"))
+      .catch((error) => {
+        setError("Error removing all rows: " + error.message);
+        console.error("Error removing all rows:", error);
+      });
+  };
+
   const handleSelectRow = (id) => {
     setSelectedRows((prevSelected) =>
       prevSelected.includes(id)
@@ -213,36 +222,23 @@ const DBTable = () => {
     handleEdit(id, field, event.target.value);
   };
 
-  const handleImport = () => {
-    // Refetch data from Firebase after import
-    const dataRef = ref(db, "data");
-    onValue(dataRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        const formattedData = Object.keys(data).map((key) => ({
-          id: key,
-          ...data[key],
-        }));
-        setData(formattedData);
-      }
-    });
-  };
-
   return (
     <div className="container mt-4">
+      <h4>Database Table</h4>
       {error && <div className="alert alert-danger">{error}</div>}
       <div className="mb-3">
-        <ImportCSV onImport={handleImport} />
-        <ExportCSV data={data} />
         <button className="btn btn-primary me-2" onClick={handleAddRow}>
           Add Row
         </button>
         <button
-          className="btn btn-danger"
+          className="btn btn-danger me-2"
           onClick={handleRemoveSelectedRows}
           disabled={selectedRows.length === 0}
         >
           Remove Selected Rows
+        </button>
+        <button className="btn btn-danger" onClick={handleRemoveAllRows}>
+          Remove All Rows
         </button>
       </div>
       <div className="table-container">

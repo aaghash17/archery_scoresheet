@@ -52,18 +52,25 @@ const ImportCSV = ({ onImport }) => {
   };
 
   return (
-    <div>
-      <input
-        type="file"
-        accept=".csv"
-        onChange={handleFileChange}
-        className="form-control mb-3"
-        key={file ? file.name : "default"} // Reset input value when file changes
-      />
-      <button onClick={handleImport} className="btn btn-primary">
-        Import
-      </button>
-    </div>
+    <>
+      <h4>Import Data</h4>
+      <div className="input-group mb-3">
+        <input
+          type="file"
+          accept=".csv"
+          onChange={handleFileChange}
+          className="form-control mb-2"
+          key={file ? file.name : "default"} // Reset input value when file changes
+        />
+        <button
+          onClick={handleImport}
+          className="btn btn-primary"
+          type="button"
+        >
+          Import
+        </button>
+      </div>
+    </>
   );
 };
 
