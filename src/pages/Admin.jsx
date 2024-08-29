@@ -5,7 +5,7 @@ import {
   setEventNameData,
   subscribeToEventName,
 } from "../firebase/firebaseService";
-import Table from "../components/table";
+import DBTable from "../components/DBTable";
 
 function Admin() {
   const [eventName, setEventName] = useState("");
@@ -93,7 +93,7 @@ function Admin() {
           </button>
         </div>
       </div>
-      <Table />
+      <DBTable />
     </div>
   );
 }

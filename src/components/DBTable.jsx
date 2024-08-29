@@ -5,9 +5,9 @@ import { db } from "../firebase/firebaseConfig";
 import ImportCSV from "./ImportCSV";
 import ExportCSV from "./ExportCSV";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./TableComponent.css";
+import "../css/DBTable.css";
 
-const TableComponent = () => {
+const DBTable = () => {
   const [data, setData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [error, setError] = useState(null);
@@ -284,4 +284,4 @@ const TableComponent = () => {
   );
 };
 
-export default TableComponent;
+export default DBTable;

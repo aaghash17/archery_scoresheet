@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { subscribeToEventName } from "../firebase/firebaseService";
-import "../components/datastyle.css";
-import "../components/table.css";
+import "../css/Scoredatastyle.css";
+import "../css/Scoretable.css";
 
-function Datatable() {
+function Score() {
   const [eventName, setEventName] = useState("");
   const [selectedBoard, setSelectedBoard] = useState("none");
 
@@ -43,4 +43,4 @@ function Datatable() {
   );
 }
 
-export default Datatable;
+export default Score;
