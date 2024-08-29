@@ -35,16 +35,20 @@ function Admin() {
             </span>
           </div>
         </nav>
+
         <div className="container mt-4">
-          <EventNameAdmin />
-        </div>
-        <div className="container mt-4">
-          <ImportCSV onImport={handleImport} />
+          <div className="row">
+            <div className="col-md-6 mb-4">
+              <EventNameAdmin />
+            </div>
+            <div className="col-md-6 mb-4">
+              <ImportCSV onImport={handleImport} />
+            </div>
+          </div>
         </div>
         <div className="container mt-4">
           <ExportCSV data={data} />
         </div>
-
         <DBTable />
       </div>
     </>
