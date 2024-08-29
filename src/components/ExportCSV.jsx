@@ -5,7 +5,7 @@ import { db } from "../firebase/firebaseConfig";
 const columnOrder = [
   "tboard",
   "tplayer",
-  "pname",
+  "name",
   "district",
   "age",
   "sex",

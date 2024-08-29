@@ -14,7 +14,7 @@ const DBTable = () => {
   const columnOrder = [
     "tboard",
     "tplayer",
-    "pname",
+    "name",
     "district",
     "age",
     "sex",
@@ -82,7 +82,7 @@ const DBTable = () => {
     const defaultRow = {
       tboard: "",
       tplayer: "",
-      pname: "",
+      name: "",
       district: "",
       age: "",
       sex: "",
@@ -132,7 +132,7 @@ const DBTable = () => {
     const newRow = {
       tboard: "",
       tplayer: "",
-      pname: "",
+      name: "",
       district: "",
       age: "",
       sex: "",
