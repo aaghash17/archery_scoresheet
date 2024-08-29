@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-import DBTable from "../components/DBTable";
+import DbTable from "../components/DBTable";
 import EventNameAdmin from "../components/EventNameAdmin";
 import ImportCSV from "../components/ImportCSV";
 import ExportCSV from "../components/ExportCSV";
@@ -49,7 +49,7 @@ function Admin() {
         <div className="container mt-4">
           <ExportCSV data={data} />
         </div>
-        <DBTable />
+        <DbTable />
       </div>
     </>
   );

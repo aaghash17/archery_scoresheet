@@ -1,4 +1,3 @@
-// src/TableComponent.jsx
 import { useEffect, useState } from "react";
 import { ref, onValue, update, push, remove } from "firebase/database";
 import { db, DATA_PATH } from "../firebase/firebaseConfig";
@@ -6,7 +5,7 @@ import { db, DATA_PATH } from "../firebase/firebaseConfig";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/DBTable.css";
 
-const DBTable = () => {
+const DbTable = () => {
   const [data, setData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [error, setError] = useState(null);
@@ -280,4 +279,4 @@ const DBTable = () => {
   );
 };
 
-export default DBTable;
+export default DbTable;
