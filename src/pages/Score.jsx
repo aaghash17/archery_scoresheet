@@ -1,19 +1,19 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import EventNameScore from "../components/EventNameScore";
 import { ref, onValue } from "firebase/database";
-import { db } from "../firebase/firebaseConfig";
+import { db, DATA_PATH } from "../firebase/firebaseConfig";
 import "../css/Scoredatastyle.css";
 import "../css/Scoretable.css";
 
 function Score() {
   const [selectedBoard, setSelectedBoard] = useState(null); // Numeric value of selected board
-  const [selectedValue, setSelectedValue] = useState("");
+  const [selectedPlayer, setSelectedPlayer] = useState(""); // Selected radio button value
   const [boards, setBoards] = useState([]);
   const [players, setPlayers] = useState([]); // State to store players
 
   useEffect(() => {
     // Fetch all boards from Firebase
-    const boardsRef = ref(db, "archeryscoresheet/data");
+    const boardsRef = ref(db, DATA_PATH);
 
     onValue(boardsRef, (snapshot) => {
       const data = snapshot.val();
@@ -31,7 +31,7 @@ function Score() {
   useEffect(() => {
     if (selectedBoard !== null) {
       // Fetch players for the selected board
-      const playersRef = ref(db, "archeryscoresheet/data");
+      const playersRef = ref(db, DATA_PATH);
 
       onValue(playersRef, (snapshot) => {
         const data = snapshot.val();
@@ -57,8 +57,8 @@ function Score() {
   };
 
   const handleradioChange = (event) => {
-    setSelectedValue(event.target.value);
-    // Call fetchvalue or any additional logic here
+    setSelectedPlayer(event.target.value);
+    console.log(`Selected Player: ${event.target.value}`);
   };
 
   return (
@@ -79,68 +79,29 @@ function Score() {
           ))}
         </select>
       </div>
-      <div>
-        <h3>Players for Board-{selectedBoard}</h3>
-        <ul>
-          {players.length > 0 ? (
-            players.map((player, index) => <li key={index}>{player}</li>)
-          ) : (
-            <li>No players found</li>
-          )}
-        </ul>
-      </div>
-      <div className="warpper">
-        <input
-          className="radio"
-          id="one"
-          value="A"
-          name="group"
-          type="radio"
-          checked={selectedValue === "A"}
-          onChange={handleradioChange}
-        />
-        <input
-          className="radio"
-          id="two"
-          value="B"
-          name="group"
-          type="radio"
-          checked={selectedValue === "B"}
-          onChange={handleradioChange}
-        />
-        <input
-          className="radio"
-          id="three"
-          value="C"
-          name="group"
-          type="radio"
-          checked={selectedValue === "C"}
-          onChange={handleradioChange}
-        />
-        <input
-          className="radio"
-          id="four"
-          value="D"
-          name="group"
-          type="radio"
-          checked={selectedValue === "D"}
-          onChange={handleradioChange}
-        />
-
-        <div className="tabs">
-          <label className="tab" htmlFor="one">
-            A
-          </label>
-          <label className="tab" htmlFor="two">
-            B
-          </label>
-          <label className="tab" htmlFor="three">
-            C
-          </label>
-          <label className="tab" htmlFor="four">
-            D
-          </label>
-        </div>
+      <div className="wrapper">
+        {players.length > 0 ? (
+          <div className="tabs">
+            {players.map((player) => (
+              <React.Fragment key={player}>
+                <input
+                  className="radio"
+                  id={`radio-${player}`}
+                  type="radio"
+                  name="group"
+                  value={player}
+                  checked={selectedPlayer === player}
+                  onChange={handleradioChange}
+                />
+                <label className="tab" htmlFor={`radio-${player}`}>
+                  {player}
+                </label>
+              </React.Fragment>
+            ))}
+          </div>
+        ) : (
+          <p>No board selected</p>
+        )}
       </div>
     </div>
   );

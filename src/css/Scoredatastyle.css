@@ -41,57 +41,35 @@ select:focus {
 }
 
 /*---------tab selection------------*/
-.warpper {
+.wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 20px;
+  padding: 20px;
+}
+
+.tabs {
+  display: flex; /* Arrange tabs horizontally */
 }
 
 .tab {
   cursor: pointer;
   padding: 10px 20px;
-  margin: 0px 5px;
+  margin: 0 5px;
   background: #32557f;
-  display: inline-block;
   color: #fff;
-  border-radius: 3px 3px 3px 3px;
-  box-shadow: 0 0.5rem 0.8rem #00000080;
-}
-/*.panels {
-  background: #fff;
-  box-shadow: 0 2rem 2rem #00000080;
-  min-height: 200px;
-  width: 100%;
-  max-width: 500px;
   border-radius: 3px;
-  overflow: hidden;
-  padding: 20px;
+  box-shadow: 0 0.5rem 0.8rem #00000080;
+  /* Align tabs side by side */
+  display: inline-block;
 }
-
-.panel {
-  display: none;
-  animation: fadein 0.8s;
-}
-*/
-
-/*@keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}*/
 
 .radio {
-  display: none;
+  display: none; /* Hide radio buttons */
 }
 
-#one:checked ~ .tabs #one-tab,
-#two:checked ~ .tabs #two-tab,
-#three:checked ~ .tabs #three-tab,
-#four:checked ~ .tabs #four-tab {
+/* Apply styles to the tab corresponding to the checked radio button */
+.radio:checked + .tab {
   background: #fff;
   color: #000;
   border-top: 3px solid #32557f;
