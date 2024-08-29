@@ -1,6 +1,6 @@
 import { useState } from "react";
-import App from "../firebase/firebaseConfig";
-import { getDatabase, ref, set, push, get } from "firebase/database";
+import { db } from "../firebase/firebaseConfig";
+import { ref, set, push, get } from "firebase/database";
 
 function Test() {
   //Write
@@ -11,7 +11,6 @@ function Test() {
   const handleInputChange2 = (e) => setInputValue2(e.target.value);
 
   const saveData = async () => {
-    const db = getDatabase(App);
     const newDocref = push(ref(db, "nature/fruit"));
     set(newDocref, {
       fruitName: inputValue1,
@@ -29,7 +28,6 @@ function Test() {
   let [fruitArray, setFruitArray] = useState([]);
 
   const fetchData = async () => {
-    const db = getDatabase(App);
     const dbRef = ref(db, "nature/fruit");
     const snapshot = await get(dbRef);
     if (snapshot.exists()) {

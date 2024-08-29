@@ -1,8 +1,6 @@
 // firebaseService.js
-import { getDatabase, ref, onValue, set } from "firebase/database";
-import App from "../firebase/firebaseConfig";
-
-const db = getDatabase(App);
+import { ref, onValue, set } from "firebase/database";
+import { db } from "../firebase/firebaseConfig";
 
 const getEventRef = () => ref(db, "archeryscoresheet/event");
 

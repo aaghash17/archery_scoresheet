@@ -1,0 +1,27 @@
+.table-container {
+  max-height: 500px; /* Adjust as needed */
+  overflow-y: auto;
+}
+
+.table {
+  width: 100%;
+  table-layout: auto; /* This ensures columns adjust to their content */
+}
+
+.table th,
+.table td {
+  white-space: nowrap; /* Prevents text from wrapping */
+}
+
+thead th {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background: #f8f9fa; /* Adjust background for header visibility */
+  z-index: 1;
+}
+
+.table-container th {
+  background-color: #343a40; /* Bootstrap default dark header background */
+  color: #fff; /* White text color for header */
+}
