@@ -27,16 +27,13 @@ function Score() {
       (snapshot) => {
         const data = snapshot.val();
         if (data) {
-          const boardNumbers = Object.values(data)
-            .map((item) => Number(item.tboard))
-            .filter((value, index, self) => self.indexOf(value) === index)
-            .sort((a, b) => a - b);
+          const boardNumbers = Array.from(
+            new Set(Object.values(data).map((item) => Number(item.tboard)))
+          ).sort((a, b) => a - b);
           setBoards(boardNumbers);
         }
       },
-      (error) => {
-        console.error("Error fetching boards:", error);
-      }
+      (error) => console.error("Error fetching boards:", error)
     );
     return () => unsubscribe();
   }, []);
@@ -61,9 +58,7 @@ function Score() {
             setPlayers([]);
           }
         },
-        (error) => {
-          console.error("Error fetching players:", error);
-        }
+        (error) => console.error("Error fetching players:", error)
       );
       return () => unsubscribe();
     } else {
@@ -95,9 +90,7 @@ function Score() {
             }));
           }
         },
-        (error) => {
-          console.error("Error fetching player details:", error);
-        }
+        (error) => console.error("Error fetching player details:", error)
       );
       return () => unsubscribe();
     } else {
@@ -137,12 +130,11 @@ function Score() {
         d13: playerDetails.scores.d13,
       })
         .then(() => console.log("Updated scores in Firebase"))
-        .catch((error) => {
-          console.error("Error updating scores:", error);
-        });
+        .catch((error) => console.error("Error updating scores:", error));
     }
   }, [playerDetails.scores, selectedPlayerId]);
 
+  // Calculate the sum of the scores
   const calculateSum = () => {
     const d11 = parseFloat(playerDetails.scores.d11) || 0;
     const d12 = parseFloat(playerDetails.scores.d12) || 0;
