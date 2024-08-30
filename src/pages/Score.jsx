@@ -1,37 +1,36 @@
 import React, { useState, useEffect, useCallback } from "react";
 import EventNameScore from "../components/EventNameScore";
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, update } from "firebase/database";
 import { db, DATA_PATH } from "../firebase/firebaseConfig";
 import "../css/Scoredatastyle.css";
 import "../css/Scoretable.css";
 
 function Score() {
-  const [selectedBoard, setSelectedBoard] = useState(null); // Numeric value of selected board
-  const [selectedPlayer, setSelectedPlayer] = useState(""); // Selected radio button value
+  const [selectedBoard, setSelectedBoard] = useState(null);
+  const [selectedPlayerId, setSelectedPlayerId] = useState("");
   const [boards, setBoards] = useState([]);
-  const [players, setPlayers] = useState([]); // State to store players
+  const [players, setPlayers] = useState([]);
   const [playerDetails, setPlayerDetails] = useState({
     name: "",
     age: "",
     bow: "",
     district: "",
     sex: "",
-  }); // State to store the selected player's details
+    scores: { d11: "", d12: "", d13: "" },
+  });
 
+  // Fetch all boards from Firebase
   useEffect(() => {
-    // Fetch all boards from Firebase
     const boardsRef = ref(db, DATA_PATH);
-
     const unsubscribe = onValue(
       boardsRef,
       (snapshot) => {
         const data = snapshot.val();
         if (data) {
           const boardNumbers = Object.values(data)
-            .map((item) => Number(item.tboard)) // Extract and convert 'tboard' field to number
-            .filter((value, index, self) => self.indexOf(value) === index) // Remove duplicates
-            .sort((a, b) => a - b); // Sort numbers
-
+            .map((item) => Number(item.tboard))
+            .filter((value, index, self) => self.indexOf(value) === index)
+            .sort((a, b) => a - b);
           setBoards(boardNumbers);
         }
       },
@@ -39,81 +38,68 @@ function Score() {
         console.error("Error fetching boards:", error);
       }
     );
-
-    return () => unsubscribe(); // Cleanup subscription on component unmount
+    return () => unsubscribe();
   }, []);
 
+  // Fetch players for the selected board
   useEffect(() => {
     if (selectedBoard !== null) {
-      // Fetch players for the selected board
       const playersRef = ref(db, DATA_PATH);
-
       const unsubscribe = onValue(
         playersRef,
         (snapshot) => {
           const data = snapshot.val();
           if (data) {
-            const playerList = Object.values(data)
-              .filter((item) => Number(item.tboard) === selectedBoard) // Filter by selected board
-              .map((item) => item.tplayer); // Extract 'tplayer' field
-
+            const playerList = Object.keys(data)
+              .filter((key) => Number(data[key].tboard) === selectedBoard)
+              .map((key) => ({
+                id: key,
+                ...data[key],
+              }));
             setPlayers(playerList);
           } else {
-            setPlayers([]); // Handle case where no players are found
+            setPlayers([]);
           }
         },
         (error) => {
           console.error("Error fetching players:", error);
         }
       );
-
-      return () => unsubscribe(); // Cleanup subscription on component unmount
+      return () => unsubscribe();
     } else {
-      setPlayers([]); // Clear players if no board is selected
+      setPlayers([]);
     }
   }, [selectedBoard]);
 
+  // Fetch the details for the selected player
   useEffect(() => {
-    if (selectedBoard !== null && selectedPlayer) {
-      // Fetch the details for the selected player
-      const playerRef = ref(db, DATA_PATH);
-
+    if (selectedPlayerId) {
+      const playerRef = ref(db, `${DATA_PATH}/${selectedPlayerId}`);
       const unsubscribe = onValue(
         playerRef,
         (snapshot) => {
           const data = snapshot.val();
           if (data) {
-            const playerData = Object.values(data).find(
-              (item) =>
-                Number(item.tboard) === selectedBoard &&
-                item.tplayer === selectedPlayer
-            );
-
-            if (playerData) {
-              setPlayerDetails({
-                name: playerData.name || "",
-                age: playerData.age || "",
-                bow: playerData.bow || "",
-                district: playerData.district || "",
-                sex: playerData.sex || "",
-              }); // Set the player's details
-            } else {
-              setPlayerDetails({
-                name: "",
-                age: "",
-                bow: "",
-                district: "",
-                sex: "",
-              }); // Clear details if player not found
-            }
+            setPlayerDetails((prevDetails) => ({
+              ...prevDetails,
+              name: data.name || prevDetails.name,
+              age: data.age || prevDetails.age,
+              bow: data.bow || prevDetails.bow,
+              district: data.district || prevDetails.district,
+              sex: data.sex || prevDetails.sex,
+              scores: {
+                d11: data.d11 || prevDetails.scores.d11,
+                d12: data.d12 || prevDetails.scores.d12,
+                d13: data.d13 || prevDetails.scores.d13,
+              },
+            }));
           }
         },
         (error) => {
           console.error("Error fetching player details:", error);
         }
       );
-
-      return () => unsubscribe(); // Cleanup subscription on component unmount
+      return () => unsubscribe();
     } else {
       setPlayerDetails({
         name: "",
@@ -121,19 +107,53 @@ function Score() {
         bow: "",
         district: "",
         sex: "",
-      }); // Clear details if board or player is not selected
+        scores: { d11: "", d12: "", d13: "" },
+      });
     }
-  }, [selectedBoard, selectedPlayer]);
+  }, [selectedPlayerId]);
 
+  // Handle changes to score inputs
+  const handleScoreChange = useCallback(
+    (field) => (event) => {
+      const newScore = event.target.value;
+      setPlayerDetails((prevDetails) => ({
+        ...prevDetails,
+        scores: {
+          ...prevDetails.scores,
+          [field]: newScore,
+        },
+      }));
+    },
+    []
+  );
+
+  // Update Firebase when scores change
+  useEffect(() => {
+    if (selectedPlayerId) {
+      const playerRef = ref(db, `${DATA_PATH}/${selectedPlayerId}`);
+      update(playerRef, {
+        d11: playerDetails.scores.d11,
+        d12: playerDetails.scores.d12,
+        d13: playerDetails.scores.d13,
+      })
+        .then(() => console.log("Updated scores in Firebase"))
+        .catch((error) => {
+          console.error("Error updating scores:", error);
+        });
+    }
+  }, [playerDetails.scores, selectedPlayerId]);
+
+  // Handle board selection change
   const handleChange = useCallback((event) => {
     const selectedValue = event.target.value;
     const boardNumber = Number(selectedValue.replace("board-", ""));
     setSelectedBoard(boardNumber);
   }, []);
 
+  // Handle player radio button change
   const handleradioChange = useCallback((event) => {
-    setSelectedPlayer(event.target.value);
-    console.log(`Selected Player: ${event.target.value}`);
+    const playerId = event.target.value;
+    setSelectedPlayerId(playerId);
   }, []);
 
   return (
@@ -159,18 +179,18 @@ function Score() {
         {players.length > 0 ? (
           <div className="tabs">
             {players.map((player) => (
-              <React.Fragment key={player}>
+              <React.Fragment key={player.id}>
                 <input
                   className="radio"
-                  id={`radio-${player}`}
+                  id={`radio-${player.id}`}
                   type="radio"
                   name="group"
-                  value={player}
-                  checked={selectedPlayer === player}
+                  value={player.id}
+                  checked={selectedPlayerId === player.id}
                   onChange={handleradioChange}
                 />
-                <label className="tab" htmlFor={`radio-${player}`}>
-                  {player}
+                <label className="tab" htmlFor={`radio-${player.id}`}>
+                  {player.tplayer}
                 </label>
               </React.Fragment>
             ))}
@@ -232,18 +252,28 @@ function Score() {
                 <div className="_text">1</div>
               </div>
               <div className="c-1">
-                <input type="number" id="d11" />
+                <input
+                  type="number"
+                  id="d11"
+                  value={playerDetails.scores.d11 || ""}
+                  onChange={handleScoreChange("d11")}
+                />
               </div>
               <div className="c-2">
-                <input type="number" id="d12" />
+                <input
+                  type="number"
+                  id="d12"
+                  value={playerDetails.scores.d12 || ""}
+                  onChange={handleScoreChange("d12")}
+                />
               </div>
               <div className="c-3">
-                <input type="number" id="d13" />
-              </div>
-              <div className="c-sum">
-                <div className="_text">
-                  <label id="s1"></label>
-                </div>
+                <input
+                  type="number"
+                  id="d13"
+                  value={playerDetails.scores.d13 || ""}
+                  onChange={handleScoreChange("d13")}
+                />
               </div>
             </div>
           </div>
