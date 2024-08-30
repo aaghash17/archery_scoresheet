@@ -143,6 +143,13 @@ function Score() {
     }
   }, [playerDetails.scores, selectedPlayerId]);
 
+  const calculateSum = () => {
+    const d11 = parseFloat(playerDetails.scores.d11) || 0;
+    const d12 = parseFloat(playerDetails.scores.d12) || 0;
+    const d13 = parseFloat(playerDetails.scores.d13) || 0;
+    return d11 + d12 + d13;
+  };
+
   // Handle board selection change
   const handleChange = useCallback((event) => {
     const selectedValue = event.target.value;
@@ -274,6 +281,11 @@ function Score() {
                   value={playerDetails.scores.d13 || ""}
                   onChange={handleScoreChange("d13")}
                 />
+              </div>
+              <div className="c-sum">
+                <div className="_text">
+                  <label id="s1">{calculateSum()}</label>
+                </div>
               </div>
             </div>
           </div>
