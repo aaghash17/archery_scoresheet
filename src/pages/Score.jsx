@@ -200,22 +200,18 @@ function Score() {
         {playerDetails.name && (
           <div>
             <div className="person-details">
-              <div className="group-2">
-                <div className="group-2-text">
-                  <label id="pname">{playerDetails.name}</label>
-                </div>
-                <div className="group-2-text">
-                  <label id="district">{playerDetails.district}</label>
-                </div>
-                <div className="group-2-text">
-                  <label id="age">{playerDetails.age}</label>
-                </div>
-                <div className="group-2-text">
-                  <label id="sex">{playerDetails.sex}</label>
-                </div>
-                <div className="group-2-text">
-                  <label id="bow">{playerDetails.bow}</label>
-                </div>
+              <div className="person-details-text">
+                <br />
+                <label id="pname">{playerDetails.name}</label>
+                <br />
+                <label id="district">{playerDetails.district}</label>
+                <br />
+                <label id="age">{playerDetails.age}</label>
+                <br />
+                <label id="sex">{playerDetails.sex}</label>
+                <br />
+                <label id="bow">{playerDetails.bow}</label>
+                <br />
               </div>
             </div>
           </div>

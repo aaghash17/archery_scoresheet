@@ -81,25 +81,9 @@ select:focus {
   display: flex;
 }
 
-.group-1 {
-  flex: 0 0 0%; /* This makes group-1 take up 30% of the width */
-}
-
-.group-1-text {
+.person-details-text {
   color: #000000;
-  text-align: right;
-  font: 500 16px "Lato", sans-serif;
-  position: relative;
-  margin-top: 2%;
-}
-
-.group-2 {
-  flex: 0 0 100%; /* This makes group-2 take up 70% of the width */
-}
-
-.group-2-text {
-  color: #000000;
-  text-align: left;
+  text-align: center;
   font: 500 16px "Lato", sans-serif;
   position: relative;
   margin-top: 2%;
