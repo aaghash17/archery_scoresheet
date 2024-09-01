@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { subscribeToEventName } from "../firebase/firebaseService";
+import { subscribeToEventName } from "../../firebase/firebaseService";
 
-function EventNameScore() {
+function EventName() {
   const [eventName, setEventName] = useState("");
   useEffect(() => {
     // Subscribe to real-time updates
@@ -20,4 +20,4 @@ function EventNameScore() {
   );
 }
 
-export default EventNameScore;
+export default EventName;

@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import {
   setEventNameData,
   subscribeToEventName,
-} from "../firebase/firebaseService";
+} from "../../firebase/firebaseService";
 
-function EventNameAdmin() {
+function EventName() {
   const [eventName, setEventName] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -84,4 +84,4 @@ function EventNameAdmin() {
   );
 }
 
-export default EventNameAdmin;
+export default EventName;

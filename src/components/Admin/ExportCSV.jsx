@@ -1,6 +1,6 @@
 import Papa from "papaparse";
 import { ref, get } from "firebase/database";
-import { db, DATA_PATH } from "../firebase/firebaseConfig";
+import { db, DATA_PATH } from "../../firebase/firebaseConfig";
 
 const columnOrder = [
   "tboard",

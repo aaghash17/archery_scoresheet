@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { ref, onValue, update, push, remove } from "firebase/database";
-import { db, DATA_PATH } from "../firebase/firebaseConfig";
+import { db, DATA_PATH } from "../../firebase/firebaseConfig";
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../css/DBTable.css";
+import "../../css/DBTable.css";
 
 const DbTable = () => {
   const [data, setData] = useState([]);

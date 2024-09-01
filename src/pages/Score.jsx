@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import EventNameScore from "../components/EventNameScore";
+import EventName from "../components/Score/EventName";
 import { ref, onValue, update } from "firebase/database";
 import { db, DATA_PATH } from "../firebase/firebaseConfig";
 import "../css/Scoredatastyle.css";
@@ -157,7 +157,7 @@ function Score() {
 
   return (
     <div className="mobile">
-      <EventNameScore />
+      <EventName />
       <div className="custom-select">
         <select
           value={selectedBoard !== null ? `board-${selectedBoard}` : "none"}
@@ -274,6 +274,16 @@ function Score() {
                 <div className="_text">
                   <label id="s1">{calculateSum()}</label>
                 </div>
+              </div>
+            </div>
+          </div>
+          <div className="table-total">
+            <div className="frame-18">
+              <div className="_text">Total</div>
+            </div>
+            <div className="frame-19">
+              <div className="_text">
+                <label id="total"></label>
               </div>
             </div>
           </div>

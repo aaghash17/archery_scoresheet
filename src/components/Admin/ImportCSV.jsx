@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import Papa from "papaparse";
 import { ref, set, push } from "firebase/database";
-import { db, DATA_PATH } from "../firebase/firebaseConfig";
+import { db, DATA_PATH } from "../../firebase/firebaseConfig";
 import { useState } from "react";
 
 const ImportCSV = ({ onImport }) => {

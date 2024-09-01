@@ -1,9 +1,9 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-import DbTable from "../components/DBTable";
-import EventNameAdmin from "../components/EventNameAdmin";
-import ImportCSV from "../components/ImportCSV";
-import ExportCSV from "../components/ExportCSV";
+import DbTable from "../components/Admin/DbTable";
+import EventName from "../components/Admin/EventName";
+import ImportCSV from "../components/Admin/ImportCSV";
+import ExportCSV from "../components/Admin/ExportCSV";
 import { ref, onValue } from "firebase/database";
 import { db } from "../firebase/firebaseConfig";
 import { useState } from "react";
@@ -39,7 +39,7 @@ function Admin() {
         <div className="container mt-4">
           <div className="row">
             <div className="col-md-6 mb-4">
-              <EventNameAdmin />
+              <EventName />
             </div>
             <div className="col-md-6 mb-4">
               <ImportCSV onImport={handleImport} />
