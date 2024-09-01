@@ -1,15 +1,13 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import EventName from "../components/Score/EventName";
+import PlayerSelector from "../components/Score/PlayerSelector";
 import { ref, onValue, update } from "firebase/database";
 import { db, DATA_PATH } from "../firebase/firebaseConfig";
 import "../css/Scoredatastyle.css";
 import "../css/Scoretable.css";
 
 function Score() {
-  const [selectedBoard, setSelectedBoard] = useState(null);
   const [selectedPlayerId, setSelectedPlayerId] = useState("");
-  const [boards, setBoards] = useState([]);
-  const [players, setPlayers] = useState([]);
   const [playerDetails, setPlayerDetails] = useState({
     name: "",
     age: "",
@@ -18,53 +16,6 @@ function Score() {
     sex: "",
     scores: { d11: "", d12: "", d13: "" },
   });
-
-  // Fetch all boards from Firebase
-  useEffect(() => {
-    const boardsRef = ref(db, DATA_PATH);
-    const unsubscribe = onValue(
-      boardsRef,
-      (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          const boardNumbers = Array.from(
-            new Set(Object.values(data).map((item) => Number(item.tboard)))
-          ).sort((a, b) => a - b);
-          setBoards(boardNumbers);
-        }
-      },
-      (error) => console.error("Error fetching boards:", error)
-    );
-    return () => unsubscribe();
-  }, []);
-
-  // Fetch players for the selected board
-  useEffect(() => {
-    if (selectedBoard !== null) {
-      const playersRef = ref(db, DATA_PATH);
-      const unsubscribe = onValue(
-        playersRef,
-        (snapshot) => {
-          const data = snapshot.val();
-          if (data) {
-            const playerList = Object.keys(data)
-              .filter((key) => Number(data[key].tboard) === selectedBoard)
-              .map((key) => ({
-                id: key,
-                ...data[key],
-              }));
-            setPlayers(playerList);
-          } else {
-            setPlayers([]);
-          }
-        },
-        (error) => console.error("Error fetching players:", error)
-      );
-      return () => unsubscribe();
-    } else {
-      setPlayers([]);
-    }
-  }, [selectedBoard]);
 
   // Fetch the details for the selected player
   useEffect(() => {
@@ -142,61 +93,16 @@ function Score() {
     return d11 + d12 + d13;
   };
 
-  // Handle board selection change
-  const handleChange = useCallback((event) => {
-    const selectedValue = event.target.value;
-    const boardNumber = Number(selectedValue.replace("board-", ""));
-    setSelectedBoard(boardNumber);
-  }, []);
-
-  // Handle player radio button change
-  const handleradioChange = useCallback((event) => {
-    const playerId = event.target.value;
-    setSelectedPlayerId(playerId);
-  }, []);
-
   return (
     <div className="mobile">
       <EventName />
-      <div className="custom-select">
-        <select
-          value={selectedBoard !== null ? `board-${selectedBoard}` : "none"}
-          onChange={handleChange}
-          aria-label="Select a board"
-        >
-          <option value="none" disabled hidden>
-            Select a board
-          </option>
-          {boards.map((boardNumber) => (
-            <option key={boardNumber} value={`board-${boardNumber}`}>
-              Board-{boardNumber}
-            </option>
-          ))}
-        </select>
-      </div>
+      <PlayerSelector
+        onBoardChange={() => {
+          // Optional: handle board change if needed
+        }}
+        onPlayerSelect={(playerId) => setSelectedPlayerId(playerId)}
+      />
       <div className="wrapper">
-        {players.length > 0 ? (
-          <div className="tabs">
-            {players.map((player) => (
-              <React.Fragment key={player.id}>
-                <input
-                  className="radio"
-                  id={`radio-${player.id}`}
-                  type="radio"
-                  name="group"
-                  value={player.id}
-                  checked={selectedPlayerId === player.id}
-                  onChange={handleradioChange}
-                />
-                <label className="tab" htmlFor={`radio-${player.id}`}>
-                  {player.tplayer}
-                </label>
-              </React.Fragment>
-            ))}
-          </div>
-        ) : (
-          <p>No board selected</p>
-        )}
         {playerDetails.name && (
           <div>
             <div className="person-details">
