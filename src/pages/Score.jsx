@@ -1,6 +1,8 @@
+// src/components/Score.js
 import { useState, useEffect, useCallback } from "react";
 import EventName from "../components/Score/EventName";
 import PlayerSelector from "../components/Score/PlayerSelector";
+import PlayerDetails from "../components/Score/PlayerDetails";
 import { ref, onValue, update } from "firebase/database";
 import { db, DATA_PATH } from "../firebase/firebaseConfig";
 import "../css/Scoredatastyle.css";
@@ -102,27 +104,7 @@ function Score() {
         }}
         onPlayerSelect={(playerId) => setSelectedPlayerId(playerId)}
       />
-      <div className="wrapper">
-        {playerDetails.name && (
-          <div>
-            <div className="person-details">
-              <div className="person-details-text">
-                <br />
-                <label id="pname">{playerDetails.name}</label>
-                <br />
-                <label id="district">{playerDetails.district}</label>
-                <br />
-                <label id="age">{playerDetails.age}</label>
-                <br />
-                <label id="sex">{playerDetails.sex}</label>
-                <br />
-                <label id="bow">{playerDetails.bow}</label>
-                <br />
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+      <PlayerDetails playerDetails={playerDetails} />
       <div className="table-scoresheet">
         <div className="table-heading">
           <div className="table-heading1">
