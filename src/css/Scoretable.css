@@ -2,171 +2,106 @@
 .table-scoresheet * {
   box-sizing: border-box;
 }
+
 .table-scoresheet {
   width: 360px;
-  height: 546px;
+  height: auto;
   position: relative;
-  margin-top: 10px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 10px auto 0;
 }
-.table-heading {
-  width: 360px;
-  height: 78px;
-  position: absolute;
-  left: 0px;
-  top: 0px;
-}
+
 .table-heading1,
-.table-heading2,
-.table-total {
+.table-heading2 {
   display: flex;
-  flex-direction: row;
-  gap: 0px;
   align-items: flex-start;
-  justify-content: flex-start;
-  position: absolute;
 }
+
 .table-heading1 {
-  width: 360px;
+  position: relative;
   height: 78px;
-  left: 0px;
-  top: 0px;
 }
 .table-heading2 {
+  position: absolute;
   width: 216px;
   height: 39px;
   left: 72px;
   top: 39px;
 }
+
+.table-total {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+}
+
 .table-total {
   width: 360px;
   height: 39px;
-  left: 0px;
-  top: 546px;
-}
-.table-data {
-  width: 360px;
-  height: 390px;
-  position: absolute;
-  left: 0px;
-  top: 78px;
 }
 
-.frame-1,
-.frame-2,
-.frame-3,
-.frame-4,
-.frame-18,
-.frame-19 {
-  background: #ffffff;
+.table-heading1-frame-1,
+.table-heading1-frame-2,
+.table-heading1-frame-3,
+.table-heading2-frame-1,
+.table-total-frame-1,
+.table-total-frame-2 {
+  background: #fff;
   border-style: solid;
   border-color: #808080;
   padding: 10px;
   display: flex;
-  flex-direction: row;
-  gap: 10px;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  position: relative;
 }
-.frame-1 {
-  border-width: 1px 0px 0px 1px;
+
+.table-heading1-frame-1 {
+  border-width: 1px 0 0 1px;
   width: 72px;
   height: 78px;
 }
-.frame-2 {
-  border-width: 1px 0px 0px 1px;
+
+.table-heading1-frame-2 {
+  border-width: 1px 0 0 1px;
   width: 216px;
   height: 39px;
 }
-.frame-3 {
-  border-width: 1px 1px 0px 1px;
+
+.table-heading1-frame-3 {
+  border-width: 1px 1px 0 1px;
   width: 72px;
   height: 78px;
 }
-.frame-4 {
-  border-width: 1px 0px 0px 1px;
+
+.table-heading2-frame-1 {
+  border-width: 1px 0 0 1px;
   width: 72px;
   height: 39px;
 }
-.frame-18 {
-  border-width: 1px 0px 1px 1px;
-  flex-shrink: 0;
+
+.table-total-frame-1 {
+  border-width: 1px 0 1px 1px;
   width: 258px;
   height: 39px;
 }
-.frame-19 {
+
+.table-total-frame-2 {
   border-width: 1px;
   width: 102px;
   height: 39px;
 }
 
 ._text {
-  color: #000000;
+  color: #000;
   text-align: center;
   font: 500 14px/130% "Lato", sans-serif;
-  position: relative;
 }
 
-.row-1,
-.row-2,
-.row-3,
-.row-4,
-.row-5,
-.row-6,
-.row-7,
-.row-8,
-.row-9,
-.row-10,
-.row-11,
-.row-12 {
+.row-data {
   display: flex;
-  flex-direction: row;
-  gap: 0px;
   align-items: flex-start;
-  justify-content: flex-start;
   width: 360px;
   height: 39px;
-  position: absolute;
-  left: 0px;
-}
-.row-1 {
-  top: 0px;
-}
-.row-2 {
-  top: 39px;
-}
-.row-3 {
-  top: 78px;
-}
-.row-4 {
-  top: 117px;
-}
-.row-5 {
-  top: 156px;
-}
-.row-6 {
-  top: 195px;
-}
-.row-7 {
-  top: 234px;
-}
-.row-8 {
-  top: 273px;
-}
-.row-9 {
-  top: 312px;
-}
-.row-10 {
-  top: 351px;
-}
-.row-11 {
-  top: 390px;
-}
-.row-12 {
-  top: 429px;
+  position: relative;
 }
 
 .c-sno,
@@ -174,41 +109,37 @@
 .c-2,
 .c-3,
 .c-sum {
-  background: #ffffff;
+  background: #fff;
   border-style: solid;
   border-color: #808080;
   padding: 10px;
   display: flex;
-  flex-direction: row;
-  gap: 10px;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
   width: 72px;
   height: 39px;
-  position: relative;
 }
 
 .c-sno {
-  border-width: 1px 0px 0px 1px;
+  border-width: 1px 0 0 1px;
 }
 .c-1 {
-  border-width: 1px 0px 0px 1px;
+  border-width: 1px 0 0 1px;
 }
 .c-2 {
-  border-width: 1px 0px 0px 1px;
+  border-width: 1px 0 0 1px;
 }
 .c-3 {
-  border-width: 1px 0px 0px 1px;
+  border-width: 1px 0 0 1px;
 }
 .c-sum {
-  border-width: 1px 1px 0px 1px;
+  border-width: 1px 1px 0 1px;
 }
 
 input[type="text"],
 input[type="number"] {
   width: 100%;
-  padding: 2px 2px;
+  padding: 2px;
   box-sizing: border-box;
   border: none;
   text-align: center;
