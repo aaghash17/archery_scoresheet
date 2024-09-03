@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import EventName from "../components/Score/EventName";
 import PlayerSelector from "../components/Score/PlayerSelector";
 import PlayerDetails from "../components/Score/PlayerDetails";
-import ScoreTable from "../components/Score/ScoreTable"; // Import the new ScoreTable component
+import ScoreTable from "../components/Score/ScoreTable";
 import { ref, onValue, update } from "firebase/database";
 import { db, DATA_PATH } from "../firebase/firebaseConfig";
 import "../css/Scoredatastyle.css";
@@ -84,15 +84,18 @@ function Score() {
       <EventName />
       <PlayerSelector
         onBoardChange={() => {
-          // Optional: handle board change if needed
+          // Reset selected player ID when the board changes
+          setSelectedPlayerId("");
         }}
         onPlayerSelect={(playerId) => setSelectedPlayerId(playerId)}
       />
       <PlayerDetails playerDetails={playerDetails} />
-      <ScoreTable
-        scores={playerDetails.scores}
-        onScoreChange={handleScoreChange}
-      />
+      {selectedPlayerId && (
+        <ScoreTable
+          scores={playerDetails.scores}
+          onScoreChange={handleScoreChange}
+        />
+      )}
     </div>
   );
 }
