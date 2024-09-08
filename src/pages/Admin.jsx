@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import DbTable from "../components/Admin/DbTable";
 import EventName from "../components/Admin/EventName";
+import NoofEnds from "../components/Admin/NoofEnds";
 import ImportCSV from "../components/Admin/ImportCSV";
 import ExportCSV from "../components/Admin/ExportCSV";
 import { ref, onValue } from "firebase/database";
@@ -42,12 +43,17 @@ function Admin() {
               <EventName />
             </div>
             <div className="col-md-6 mb-4">
-              <ImportCSV onImport={handleImport} />
+              <NoofEnds />
             </div>
           </div>
-        </div>
-        <div className="container mt-4">
-          <ExportCSV data={data} />
+          <div className="row">
+            <div className="col-md-6 mb-4">
+              <ImportCSV onImport={handleImport} />
+            </div>
+            <div className="col-md-6 mb-4">
+              <ExportCSV data={data} />
+            </div>
+          </div>
         </div>
         <DbTable />
       </div>
