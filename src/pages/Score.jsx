@@ -26,6 +26,7 @@ function Score() {
 
   return (
     <div className="mobile">
+      <br></br>
       <EventName />
       <PlayerSelector
         scoreData={scoreData}
@@ -43,6 +44,7 @@ function Score() {
           selectedPlayerId={selectedPlayerId}
         />
       )}
+      <br></br>
     </div>
   );
 }

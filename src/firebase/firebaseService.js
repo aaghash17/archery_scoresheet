@@ -1,4 +1,4 @@
-import { ref, onValue, set } from "firebase/database";
+import { ref, onValue, set, update } from "firebase/database";
 import {
   db,
   EVENT_PATH,
@@ -6,94 +6,93 @@ import {
   SCORE_PATH,
 } from "../firebase/firebaseConfig";
 
-// Helper function to get a reference to the event data
-const getEventRef = () => ref(db, EVENT_PATH);
+// Utility function to handle errors
+const handleFirebaseError = (error) => {
+  console.error("Firebase operation failed:", error.message);
+  throw new Error("Firebase operation failed: " + error.message);
+};
 
-// Helper function to get a reference to the NoofEnds data
-const getNoofEndsRef = () => ref(db, ENDS_PATH);
-
-// Helper function to get a reference to the Score data
-const getScoreRef = () => ref(db, SCORE_PATH);
+// Helper function to get a reference to Firebase data paths
+const getFirebaseRef = (path) => ref(db, path);
 
 // Function to set event name data
 export const setEventNameData = async (eventName) => {
   try {
-    const eventRef = getEventRef();
+    const eventRef = getFirebaseRef(EVENT_PATH);
     await set(eventRef, { eventName });
   } catch (error) {
-    console.error("Failed to save data:", error.message);
-    throw new Error("Failed to save data: " + error.message);
+    handleFirebaseError(error);
   }
 };
 
 // Function to subscribe to event name updates
 export const subscribeToEventName = (callback) => {
-  const eventRef = getEventRef();
+  const eventRef = getFirebaseRef(EVENT_PATH);
   const unsubscribe = onValue(
     eventRef,
     (snapshot) => {
-      if (snapshot.exists()) {
-        callback(snapshot.val().eventName || "");
-      } else {
-        callback(""); // Document does not exist, return empty data
-      }
+      const eventName = snapshot.exists() ? snapshot.val().eventName || "" : "";
+      callback(eventName);
     },
     (error) => {
-      console.error("Failed to load data:", error.message);
-      callback(""); // Optionally handle or display the error
+      handleFirebaseError(error);
+      callback(""); // Handle error in callback
     }
   );
-
   return unsubscribe;
 };
 
-// Function to set NoofEnds data
+// Function to set number of ends data
 export const setNoofEndsData = async (noOfEnds) => {
   try {
-    const noOfEndsRef = getNoofEndsRef();
+    const noOfEndsRef = getFirebaseRef(ENDS_PATH);
     await set(noOfEndsRef, { noOfEnds });
   } catch (error) {
-    console.error("Failed to save data:", error.message);
-    throw new Error("Failed to save data: " + error.message);
+    handleFirebaseError(error);
   }
 };
 
-// Function to subscribe to NoofEnds updates
+// Function to subscribe to number of ends updates
 export const subscribeToNoofEnds = (callback) => {
-  const noOfEndsRef = getNoofEndsRef();
+  const noOfEndsRef = getFirebaseRef(ENDS_PATH);
   const unsubscribe = onValue(
     noOfEndsRef,
     (snapshot) => {
-      if (snapshot.exists()) {
-        callback(snapshot.val().noOfEnds || "");
-      } else {
-        callback(""); // Document does not exist, return empty data
-      }
+      const noOfEnds = snapshot.exists() ? snapshot.val().noOfEnds || "" : "";
+      callback(noOfEnds);
     },
     (error) => {
-      console.error("Failed to load data:", error.message);
-      callback(""); // Optionally handle or display the error
+      handleFirebaseError(error);
+      callback(""); // Handle error in callback
     }
   );
   return unsubscribe;
 };
 
-// Function to subscribe to ScoreData updates
+// Function to subscribe to score data updates
 export const subscribeToScoreData = (callback) => {
-  const ScoreDataRef = getScoreRef();
+  const scoreRef = getFirebaseRef(SCORE_PATH);
   const unsubscribe = onValue(
-    ScoreDataRef,
+    scoreRef,
     (snapshot) => {
-      if (snapshot.exists()) {
-        callback(snapshot.val() || "");
-      } else {
-        callback(""); // Document does not exist, return empty data
-      }
+      const scoreData = snapshot.exists() ? snapshot.val() || "" : "";
+      callback(scoreData);
     },
     (error) => {
-      console.error("Failed to load data:", error.message);
-      callback(""); // Optionally handle or display the error
+      handleFirebaseError(error);
+      callback(""); // Handle error in callback
     }
   );
   return unsubscribe;
+};
+
+// Function to handle the score edit
+
+export const handleScoreEdit = (id, field, value) => {
+  const dataRef = ref(db, `${SCORE_PATH}/${id}`);
+  update(dataRef, { [field]: value })
+    .then(() => console.log(`Updated ${field} for row ${id}`))
+    .catch((error) => {
+      handleFirebaseError(error);
+    });
 };
