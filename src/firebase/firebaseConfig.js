@@ -1,6 +1,6 @@
-export const DATA_PATH = "archeryscoresheet/data";
-export const EVENT_PATH = "archeryscoresheet/event/EventName";
-export const ENDS_PATH = "archeryscoresheet/event/NoOfEnds";
+export const DATA_PATH = "archeryscoresheet/scoredata";
+export const EVENT_PATH = "archeryscoresheet/eventdata/EventName";
+export const ENDS_PATH = "archeryscoresheet/eventdata/NoOfEnds";
 
 import { initializeApp, getApp, getApps } from "firebase/app";
 import {
