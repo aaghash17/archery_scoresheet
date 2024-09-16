@@ -1,16 +1,32 @@
 import { useEffect, useState } from "react";
 import { ref, onValue, update, push, remove } from "firebase/database";
 import { db, DATA_PATH } from "../../firebase/firebaseConfig";
+import { subscribeToNoofEnds } from "../../firebase/firebaseService";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../css/DBTable.css";
 
 const DbTable = () => {
+  const [noOfEnds, setNoOfEnds] = useState("");
   const [data, setData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [error, setError] = useState(null);
 
-  const columnOrder = [
+  useEffect(() => {
+    // Subscribe to real-time updates
+    const unsubscribe = subscribeToNoofEnds((newNoOfEnds) => {
+      setNoOfEnds(newNoOfEnds || ""); // Update state with the latest no of ends
+    });
+
+    // Cleanup the listener on component unmount
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, []);
+
+  let playerInfo = [
     "tboard",
     "tplayer",
     "name",
@@ -18,38 +34,18 @@ const DbTable = () => {
     "age",
     "sex",
     "bow",
-    "total",
-    "d11",
-    "d12",
-    "d13",
-    "d21",
-    "d22",
-    "d23",
-    "d31",
-    "d32",
-    "d33",
-    "d41",
-    "d42",
-    "d43",
-    "d51",
-    "d52",
-    "d53",
-    "d61",
-    "d62",
-    "d63",
-    "d71",
-    "d72",
-    "d73",
-    "d81",
-    "d82",
-    "d83",
-    "d91",
-    "d92",
-    "d93",
-    "d101",
-    "d102",
-    "d103",
   ];
+  let playerTotal = ["total"];
+
+  let playerScore = [];
+
+  for (let i = 1; i <= noOfEnds; i++) {
+    for (let j = 1; j <= 3; j++) {
+      playerScore.push(`d${i}${j}`);
+    }
+  }
+
+  const columnOrder = [...playerInfo, ...playerTotal, ...playerScore];
 
   useEffect(() => {
     const dataRef = ref(db, DATA_PATH);
@@ -87,36 +83,6 @@ const DbTable = () => {
       sex: "",
       bow: "",
       total: 0,
-      d11: "",
-      d12: "",
-      d13: "",
-      d21: "",
-      d22: "",
-      d23: "",
-      d31: "",
-      d32: "",
-      d33: "",
-      d41: "",
-      d42: "",
-      d43: "",
-      d51: "",
-      d52: "",
-      d53: "",
-      d61: "",
-      d62: "",
-      d63: "",
-      d71: "",
-      d72: "",
-      d73: "",
-      d81: "",
-      d82: "",
-      d83: "",
-      d91: "",
-      d92: "",
-      d93: "",
-      d101: "",
-      d102: "",
-      d103: "",
     };
     const newRowRef = ref(db, DATA_PATH);
     push(newRowRef, newRow)

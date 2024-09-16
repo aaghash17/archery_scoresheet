@@ -5,7 +5,9 @@ import {
 } from "../../firebase/firebaseService";
 
 function NoofEnds() {
+  const maxEnds = 12;
   const [noOfEnds, setNoOfEnds] = useState("");
+  const [previousValidValue, setPreviousValidValue] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
@@ -14,6 +16,7 @@ function NoofEnds() {
     // Subscribe to real-time updates
     const unsubscribe = subscribeToNoofEnds((newNoOfEnds) => {
       setNoOfEnds(newNoOfEnds || ""); // Update state with the latest no of ends
+      setPreviousValidValue(newNoOfEnds || ""); // Update previous valid value
     });
 
     // Cleanup the listener on component unmount
@@ -25,8 +28,18 @@ function NoofEnds() {
   }, []);
 
   const saveData = async () => {
-    if (!noOfEnds.trim() || isNaN(noOfEnds)) {
+    const trimmedNoOfEnds = noOfEnds.trim();
+    const numericValue = Number(trimmedNoOfEnds);
+
+    if (!trimmedNoOfEnds || isNaN(numericValue)) {
       setError("NoofEnds must be a valid number.");
+      setNoOfEnds(previousValidValue); // Revert to previous valid value
+      return;
+    }
+
+    if (numericValue < 0 || numericValue > maxEnds) {
+      setError(`NoofEnds must be between 0 and ${maxEnds}.`);
+      setNoOfEnds(previousValidValue); // Revert to previous valid value
       return;
     }
 
@@ -35,7 +48,8 @@ function NoofEnds() {
     setLoading(true);
 
     try {
-      await setNoofEndsData(Number(noOfEnds));
+      await setNoofEndsData(numericValue);
+      setPreviousValidValue(String(numericValue)); // Update previous valid value
       setSuccess("Data updated successfully!");
 
       // Hide success message after 3 seconds
