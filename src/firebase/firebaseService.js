@@ -1,11 +1,19 @@
 import { ref, onValue, set } from "firebase/database";
-import { db, EVENT_PATH, ENDS_PATH } from "../firebase/firebaseConfig";
+import {
+  db,
+  EVENT_PATH,
+  ENDS_PATH,
+  SCORE_PATH,
+} from "../firebase/firebaseConfig";
 
 // Helper function to get a reference to the event data
 const getEventRef = () => ref(db, EVENT_PATH);
 
 // Helper function to get a reference to the NoofEnds data
 const getNoofEndsRef = () => ref(db, ENDS_PATH);
+
+// Helper function to get a reference to the Score data
+const getScoreRef = () => ref(db, SCORE_PATH);
 
 // Function to set event name data
 export const setEventNameData = async (eventName) => {
@@ -67,6 +75,25 @@ export const subscribeToNoofEnds = (callback) => {
       callback(""); // Optionally handle or display the error
     }
   );
+  return unsubscribe;
+};
 
+// Function to subscribe to ScoreData updates
+export const subscribeToScoreData = (callback) => {
+  const ScoreDataRef = getScoreRef();
+  const unsubscribe = onValue(
+    ScoreDataRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        callback(snapshot.val() || "");
+      } else {
+        callback(""); // Document does not exist, return empty data
+      }
+    },
+    (error) => {
+      console.error("Failed to load data:", error.message);
+      callback(""); // Optionally handle or display the error
+    }
+  );
   return unsubscribe;
 };

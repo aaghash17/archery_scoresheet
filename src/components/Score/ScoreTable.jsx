@@ -1,15 +1,39 @@
-import { useMemo } from "react";
+import { useState, useMemo } from "react";
 import PropTypes from "prop-types";
+import { ref, update } from "firebase/database";
+import { db, SCORE_PATH } from "../../firebase/firebaseConfig";
 import "../../css/Scoretable.css";
 
-function ScoreTable({ scores, onScoreChange }) {
+function ScoreTable({ scoreData, selectedPlayerId }) {
+  const [error, setError] = useState(null);
+
+  const handleEdit = (id, field, value) => {
+    const dataRef = ref(db, `${SCORE_PATH}/${selectedPlayerId}`);
+    update(dataRef, { [field]: value })
+      .then(() => console.log(`Updated ${field} for row ${id}`))
+      .catch((error) => {
+        setError("Error updating data: " + error.message);
+        console.error("Error updating data:", error);
+      });
+  };
+
+  const handleChange = (field, event) => {
+    handleEdit(selectedPlayerId, field, event.target.value);
+  };
+
   // Calculate the sum of the scores
-  const calculateSum1 = useMemo(() => {
-    const d11 = parseFloat(scores.d11) || 0;
-    const d12 = parseFloat(scores.d12) || 0;
-    const d13 = parseFloat(scores.d13) || 0;
+  const calculateSum = useMemo(() => {
+    const d11 = parseFloat(scoreData.d11) || 0;
+    const d12 = parseFloat(scoreData.d12) || 0;
+    const d13 = parseFloat(scoreData.d13) || 0;
     return d11 + d12 + d13;
-  }, [scores]);
+  }, [scoreData]);
+
+  // Calculate total sum (example with one row, extend this as needed)
+  const calculateTotalSum = useMemo(() => {
+    // Here we assume there's only one row, adapt if you have more
+    return calculateSum; // Extend for multiple rows if needed
+  }, [calculateSum]);
 
   return (
     <div className="table-scoresheet">
@@ -42,33 +66,31 @@ function ScoreTable({ scores, onScoreChange }) {
         <div className="c-1">
           <input
             type="number"
-            id="d11"
-            value={scores.d11 || ""}
-            onChange={onScoreChange("d11")}
+            value={scoreData["d11"] || ""}
+            onChange={(e) => handleChange("d11", e)}
           />
         </div>
         <div className="c-2">
           <input
             type="number"
-            id="d12"
-            value={scores.d12 || ""}
-            onChange={onScoreChange("d12")}
+            value={scoreData["d12"] || ""}
+            onChange={(e) => handleChange("d12", e)}
           />
         </div>
         <div className="c-3">
           <input
             type="number"
-            id="d13"
-            value={scores.d13 || ""}
-            onChange={onScoreChange("d13")}
+            value={scoreData["d13"] || ""}
+            onChange={(e) => handleChange("d13", e)}
           />
         </div>
         <div className="c-sum">
           <div className="_text">
-            <label id="s1">{calculateSum1}</label>
+            <label id="s1">{calculateSum}</label>
           </div>
         </div>
       </div>
+      {/* Example for a second row */}
       <div className="row-data">
         <div className="c-sno">
           <div className="_text">2</div>
@@ -86,21 +108,22 @@ function ScoreTable({ scores, onScoreChange }) {
         </div>
         <div className="table-total-frame-2">
           <div className="_text">
-            <label id="total"></label>
+            <label id="total">{calculateTotalSum}</label>
           </div>
         </div>
       </div>
+      {error && <div className="error-message">{error}</div>}
     </div>
   );
 }
 
 ScoreTable.propTypes = {
-  scores: PropTypes.shape({
+  scoreData: PropTypes.shape({
     d11: PropTypes.string,
     d12: PropTypes.string,
     d13: PropTypes.string,
   }).isRequired,
-  onScoreChange: PropTypes.func.isRequired,
+  selectedPlayerId: PropTypes.string.isRequired,
 };
 
 export default ScoreTable;

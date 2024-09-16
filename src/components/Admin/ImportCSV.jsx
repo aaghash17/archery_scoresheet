@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import Papa from "papaparse";
 import { ref, set, push } from "firebase/database";
-import { db, DATA_PATH } from "../../firebase/firebaseConfig";
+import { db, SCORE_PATH } from "../../firebase/firebaseConfig";
 import { useState } from "react";
 
 const ImportCSV = ({ onImport }) => {
@@ -38,7 +38,7 @@ const ImportCSV = ({ onImport }) => {
   };
 
   const importData = (data) => {
-    const dataRef = ref(db, DATA_PATH);
+    const dataRef = ref(db, SCORE_PATH);
     const updates = {};
 
     data.forEach((row) => {
@@ -49,7 +49,7 @@ const ImportCSV = ({ onImport }) => {
 
     Promise.all(
       Object.keys(updates).map(
-        (key) => set(ref(db, DATA_PATH + `/${key}`), updates[key]) // Correct path
+        (key) => set(ref(db, SCORE_PATH + `/${key}`), updates[key]) // Correct path
       )
     )
       .then(() => {

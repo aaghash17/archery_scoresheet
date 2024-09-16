@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
-import { ref, onValue, update, push, remove } from "firebase/database";
-import { db, DATA_PATH } from "../../firebase/firebaseConfig";
-import { subscribeToNoofEnds } from "../../firebase/firebaseService";
+import { ref, update, push, remove } from "firebase/database";
+import { db, SCORE_PATH } from "../../firebase/firebaseConfig";
+import {
+  subscribeToNoofEnds,
+  subscribeToScoreData,
+} from "../../firebase/firebaseService";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../css/DBTable.css";
@@ -48,29 +51,22 @@ const DbTable = () => {
   const columnOrder = [...playerInfo, ...playerTotal, ...playerScore];
 
   useEffect(() => {
-    const dataRef = ref(db, DATA_PATH);
-
-    const unsubscribe = onValue(
-      dataRef,
-      (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          const formattedData = Object.keys(data).map((key) => ({
-            id: key,
-            ...data[key],
-          }));
-          setData(formattedData);
-        } else {
-          setData([]); // Set to an empty array if no data
-        }
-      },
-      (error) => {
-        setError("Error fetching data: " + error.message);
-        console.error("Firebase data fetch error:", error);
+    const unsubscribe = subscribeToScoreData((scoreData) => {
+      if (scoreData) {
+        const formattedData = Object.keys(scoreData).map((key) => ({
+          id: key,
+          ...scoreData[key],
+        }));
+        setData(formattedData);
+      } else {
+        setData([]); // Set to an empty array if no data
       }
-    );
-
-    return () => unsubscribe();
+    });
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   }, []);
 
   const handleAddRow = () => {
@@ -84,7 +80,7 @@ const DbTable = () => {
       bow: "",
       total: 0,
     };
-    const newRowRef = ref(db, DATA_PATH);
+    const newRowRef = ref(db, SCORE_PATH);
     push(newRowRef, newRow)
       .then(() => console.log("Added new row"))
       .catch((error) => {
@@ -95,7 +91,7 @@ const DbTable = () => {
 
   const handleRemoveSelectedRows = () => {
     selectedRows.forEach((id) => {
-      remove(ref(db, `${DATA_PATH}/${id}`))
+      remove(ref(db, `${SCORE_PATH}/${id}`))
         .then(() => console.log(`Removed row with id ${id}`))
         .catch((error) => {
           setError("Error removing row: " + error.message);
@@ -106,7 +102,7 @@ const DbTable = () => {
   };
 
   const handleRemoveAllRows = () => {
-    const dataRef = ref(db, DATA_PATH);
+    const dataRef = ref(db, SCORE_PATH);
     remove(dataRef)
       .then(() => {
         console.log("Removed all rows");
@@ -127,7 +123,7 @@ const DbTable = () => {
   };
 
   const handleEdit = (id, field, value) => {
-    const dataRef = ref(db, `${DATA_PATH}/${id}`);
+    const dataRef = ref(db, `${SCORE_PATH}/${id}`);
     update(dataRef, { [field]: value })
       .then(() => console.log(`Updated ${field} for row ${id}`))
       .catch((error) => {

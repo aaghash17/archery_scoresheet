@@ -1,4 +1,4 @@
-export const DATA_PATH = "archeryscoresheet/scoredata";
+export const SCORE_PATH = "archeryscoresheet/scoredata";
 export const EVENT_PATH = "archeryscoresheet/eventdata/EventName";
 export const ENDS_PATH = "archeryscoresheet/eventdata/NoOfEnds";
 

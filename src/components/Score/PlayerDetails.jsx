@@ -1,22 +1,26 @@
 import PropTypes from "prop-types"; // Import PropTypes
 
-const PlayerDetails = ({ playerDetails }) => {
-  if (!playerDetails.name) return null;
+const PlayerDetails = ({ playerData }) => {
+  if (!playerData) {
+    return null;
+  } else {
+    console.log(playerData);
+  }
 
   return (
     <div className="wrapper">
       <div className="person-details">
         <div className="person-details-text">
           <br />
-          <label id="pname">{playerDetails.name}</label>
+          <label id="pname">{playerData.name}</label>
           <br />
-          <label id="district">{playerDetails.district}</label>
+          <label id="district">{playerData.district}</label>
           <br />
-          <label id="age">{playerDetails.age}</label>
+          <label id="age">{playerData.age}</label>
           <br />
-          <label id="sex">{playerDetails.sex}</label>
+          <label id="sex">{playerData.sex}</label>
           <br />
-          <label id="bow">{playerDetails.bow}</label>
+          <label id="bow">{playerData.bow}</label>
           <br />
         </div>
       </div>
@@ -24,15 +28,15 @@ const PlayerDetails = ({ playerDetails }) => {
   );
 };
 
-// Define the expected prop types for this component
+// Define prop types
 PlayerDetails.propTypes = {
-  playerDetails: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    age: PropTypes.string.isRequired,
-    bow: PropTypes.string.isRequired,
-    district: PropTypes.string.isRequired,
-    sex: PropTypes.string.isRequired,
-  }).isRequired,
+  playerData: PropTypes.shape({
+    name: PropTypes.string,
+    district: PropTypes.string,
+    age: PropTypes.string,
+    sex: PropTypes.string,
+    bow: PropTypes.string,
+  }),
 };
 
 export default PlayerDetails;
