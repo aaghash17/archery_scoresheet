@@ -1,11 +1,7 @@
 import PropTypes from "prop-types"; // Import PropTypes
 
 const PlayerDetails = ({ playerData }) => {
-  if (!playerData) {
-    return null;
-  } else {
-    console.log(playerData);
-  }
+  if (!playerData) return null;
 
   return (
     <div className="wrapper">
