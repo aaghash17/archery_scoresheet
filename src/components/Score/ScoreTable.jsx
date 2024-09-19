@@ -7,6 +7,20 @@ import {
 import RowData from "./RowData";
 import "../../css/Scoretable.css";
 
+function checkValueToWrite({ value }) {
+  if (
+    value === "X" ||
+    value === "M" ||
+    (typeof value === "string" &&
+      !isNaN(value) &&
+      Number(value) >= 0 &&
+      Number(value) <= 10)
+  ) {
+    return true;
+  }
+  return false;
+}
+
 function ScoreTable({ scoreData, selectedPlayerId }) {
   const [noOfEnds, setNoOfEnds] = useState("");
 
@@ -23,7 +37,9 @@ function ScoreTable({ scoreData, selectedPlayerId }) {
   }, []);
 
   const handleChange = (field, event) => {
-    handleScoreEdit(selectedPlayerId, field, event.target.value);
+    if (checkValueToWrite({ value: event.target.value })) {
+      handleScoreEdit(selectedPlayerId, field, event.target.value);
+    }
   };
 
   return (
