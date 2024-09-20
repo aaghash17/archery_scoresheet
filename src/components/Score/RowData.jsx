@@ -33,7 +33,6 @@ SumCell.propTypes = {
 
 // Main RowData component
 const RowData = ({ index, scoreData, handleChange }) => {
-  // Memoize fieldset to avoid recalculating on every render
   const fieldset = useMemo(
     () => [`d${index}1`, `d${index}2`, `d${index}3`],
     [index]
@@ -41,39 +40,16 @@ const RowData = ({ index, scoreData, handleChange }) => {
 
   // Calculate sum of the fields
   const calculateSum = useMemo(() => {
-    const calculateFieldSum = (sum, field) => {
+    const totalSum = fieldset.reduce((sum, field) => {
       const value = scoreData[field];
-      let score;
+      if (value === "X") return sum + 10;
+      if (value === "M") return sum + 0;
+      if (value === "" || value === null) return sum;
+      const numValue = parseFloat(value);
+      return isNaN(numValue) ? sum : sum + numValue;
+    }, 0);
 
-      // Determine the score based on the value
-      if (value === "X") {
-        score = 10;
-      } else if (value === "M") {
-        score = 0;
-      } else if (value === "" || value === null) {
-        score = null; // Treat empty strings as null
-      } else {
-        score = parseFloat(value);
-        score = isNaN(score) ? null : score; // Use null for NaN
-      }
-
-      // If score is valid (not null), add it to the sum
-      return score !== null ? sum + score : sum;
-    };
-
-    const totalSum = fieldset.reduce(calculateFieldSum, 0);
-
-    // Check if there were any valid scores
-    const hasValidScore = fieldset.some((field) => {
-      const value = scoreData[field];
-      return (
-        value === "X" ||
-        value === "M" ||
-        (typeof value === "string" && !isNaN(value) && value !== "")
-      );
-    });
-
-    return hasValidScore ? totalSum : ""; // Return total sum if valid scores exist, else null
+    return totalSum > 0 ? totalSum : ""; // Return an empty string if the sum is 0
   }, [fieldset, scoreData]);
 
   return (
@@ -94,10 +70,9 @@ const RowData = ({ index, scoreData, handleChange }) => {
   );
 };
 
-// Define prop types for RowData
 RowData.propTypes = {
   index: PropTypes.number.isRequired,
-  scoreData: PropTypes.objectOf(PropTypes.string).isRequired, // Changed to objectOf(PropTypes.string)
+  scoreData: PropTypes.objectOf(PropTypes.string).isRequired,
   handleChange: PropTypes.func.isRequired,
 };
 

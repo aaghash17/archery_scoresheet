@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import PropTypes from "prop-types";
 import {
   handleScoreEdit,
@@ -8,17 +8,14 @@ import RowData from "./RowData";
 import "../../css/Scoretable.css";
 
 function checkValueToWrite({ value }) {
-  if (
+  return (
     value === "X" ||
     value === "M" ||
     (typeof value === "string" &&
       !isNaN(value) &&
       Number(value) >= 0 &&
       Number(value) <= 10)
-  ) {
-    return true;
-  }
-  return false;
+  );
 }
 
 function ScoreTable({ scoreData, selectedPlayerId }) {
@@ -26,7 +23,7 @@ function ScoreTable({ scoreData, selectedPlayerId }) {
 
   useEffect(() => {
     const unsubscribe = subscribeToNoofEnds((newNoOfEnds) => {
-      setNoOfEnds(newNoOfEnds || ""); // Update state with the latest no of ends
+      setNoOfEnds(newNoOfEnds || "");
     });
 
     return () => {
@@ -36,11 +33,29 @@ function ScoreTable({ scoreData, selectedPlayerId }) {
     };
   }, []);
 
-  const handleChange = (field, event) => {
-    if (checkValueToWrite({ value: event.target.value })) {
-      handleScoreEdit(selectedPlayerId, field, event.target.value);
-    }
-  };
+  const handleChange = useCallback(
+    (field, event) => {
+      if (checkValueToWrite({ value: event.target.value })) {
+        handleScoreEdit(selectedPlayerId, field, event.target.value);
+      }
+    },
+    [selectedPlayerId]
+  );
+
+  const totalSum = useMemo(() => {
+    return Array.from({ length: noOfEnds }).reduce((acc, _, index) => {
+      const fieldset = [`d${index + 1}1`, `d${index + 1}2`, `d${index + 1}3`];
+      const rowSum = fieldset.reduce((sum, field) => {
+        const value = scoreData[field];
+        if (value === "X") return sum + 10;
+        if (value === "M") return sum + 0;
+        if (value === "" || value === null) return sum;
+        const numValue = parseFloat(value);
+        return isNaN(numValue) ? sum : sum + numValue;
+      }, 0);
+      return acc + rowSum;
+    }, 0);
+  }, [noOfEnds, scoreData]);
 
   return (
     <div className="table-scoresheet">
@@ -81,9 +96,7 @@ function ScoreTable({ scoreData, selectedPlayerId }) {
           <div className="_text">Total</div>
         </div>
         <div className="table-total-frame-2">
-          <div className="_text">
-            <label id="total">To-do-Total</label>
-          </div>
+          <div className="_text">{totalSum}</div>
         </div>
       </div>
     </div>
