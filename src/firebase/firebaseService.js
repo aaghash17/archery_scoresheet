@@ -1,4 +1,4 @@
-import { ref, onValue, set, update } from "firebase/database";
+import { ref, onValue, set, update, get } from "firebase/database";
 import {
   db,
   EVENT_PATH,
@@ -86,12 +86,30 @@ export const subscribeToScoreData = (callback) => {
   return unsubscribe;
 };
 
+export const getScoreData = async (playerId) => {
+  const scoreRef = getFirebaseRef(`${SCORE_PATH}/${playerId}`);
+
+  try {
+    const snapshot = await get(scoreRef); // Use the `get` function to retrieve the data
+    if (snapshot.exists()) {
+      return snapshot.val(); // Return the score data for the specific player
+    } else {
+      return {}; // Return an empty object if no data exists for the player
+    }
+  } catch (error) {
+    handleFirebaseError(error); // Handle any errors
+    return {}; // Return an empty object on error
+  }
+};
+
 // Function to handle the score edit
 
 export const handleScoreEdit = (id, field, value) => {
   const dataRef = ref(db, `${SCORE_PATH}/${id}`);
-  update(dataRef, { [field]: value })
-    .then(() => console.log(`Updated ${field} for row ${id}`))
+  return update(dataRef, { [field]: value })
+    .then(() => {
+      console.log(`Updated ${field} for row ${id}`);
+    })
     .catch((error) => {
       handleFirebaseError(error);
     });

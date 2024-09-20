@@ -1,13 +1,14 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import {
+  getScoreData,
   handleScoreEdit,
   subscribeToNoofEnds,
 } from "../../firebase/firebaseService";
 import RowData from "./RowData";
 import "../../css/Scoretable.css";
 
-function checkValueToWrite({ value }) {
+const isValidScoreValue = (value) => {
   return (
     value === "X" ||
     value === "M" ||
@@ -16,46 +17,43 @@ function checkValueToWrite({ value }) {
       Number(value) >= 0 &&
       Number(value) <= 10)
   );
-}
+};
+
+const calculateTotalSum = (scoreData, noOfEnds) => {
+  return Array.from({ length: noOfEnds }).reduce((acc, _, index) => {
+    const fieldset = [`d${index + 1}1`, `d${index + 1}2`, `d${index + 1}3`];
+    const rowSum = fieldset.reduce((sum, field) => {
+      const value = scoreData[field];
+      if (value === undefined) return sum; // Skip undefined values
+      if (value === "X") return sum + 10;
+      if (value === "M") return sum;
+      const numValue = parseFloat(value);
+      return isNaN(numValue) ? sum : sum + numValue;
+    }, 0);
+    return acc + rowSum;
+  }, 0);
+};
 
 function ScoreTable({ scoreData, selectedPlayerId }) {
   const [noOfEnds, setNoOfEnds] = useState("");
 
   useEffect(() => {
-    const unsubscribe = subscribeToNoofEnds((newNoOfEnds) => {
-      setNoOfEnds(newNoOfEnds || "");
-    });
-
-    return () => {
-      if (unsubscribe) {
-        unsubscribe();
-      }
-    };
+    const unsubscribe = subscribeToNoofEnds(setNoOfEnds);
+    return () => unsubscribe && unsubscribe();
   }, []);
 
   const handleChange = useCallback(
-    (field, event) => {
-      if (checkValueToWrite({ value: event.target.value })) {
-        handleScoreEdit(selectedPlayerId, field, event.target.value);
+    async (field, event) => {
+      const newValue = event.target.value;
+      if (isValidScoreValue(newValue)) {
+        await handleScoreEdit(selectedPlayerId, field, newValue);
+        const newScoreData = await getScoreData(selectedPlayerId); // Pass playerId to get specific data
+        const totalSum = calculateTotalSum(newScoreData, noOfEnds); // Calculate total sum
+        await handleScoreEdit(selectedPlayerId, "total", totalSum); // Update total in the database
       }
     },
-    [selectedPlayerId]
+    [selectedPlayerId, noOfEnds]
   );
-
-  const totalSum = useMemo(() => {
-    return Array.from({ length: noOfEnds }).reduce((acc, _, index) => {
-      const fieldset = [`d${index + 1}1`, `d${index + 1}2`, `d${index + 1}3`];
-      const rowSum = fieldset.reduce((sum, field) => {
-        const value = scoreData[field];
-        if (value === "X") return sum + 10;
-        if (value === "M") return sum + 0;
-        if (value === "" || value === null) return sum;
-        const numValue = parseFloat(value);
-        return isNaN(numValue) ? sum : sum + numValue;
-      }, 0);
-      return acc + rowSum;
-    }, 0);
-  }, [noOfEnds, scoreData]);
 
   return (
     <div className="table-scoresheet">
@@ -71,15 +69,11 @@ function ScoreTable({ scoreData, selectedPlayerId }) {
         </div>
       </div>
       <div className="table-heading2">
-        <div className="table-heading2-frame-1">
-          <div className="_text">1</div>
-        </div>
-        <div className="table-heading2-frame-1">
-          <div className="_text">2</div>
-        </div>
-        <div className="table-heading2-frame-1">
-          <div className="_text">3</div>
-        </div>
+        {[1, 2, 3].map((num) => (
+          <div className="table-heading2-frame-1" key={num}>
+            <div className="_text">{num}</div>
+          </div>
+        ))}
       </div>
       <div>
         {Array.from({ length: noOfEnds }).map((_, index) => (
@@ -96,7 +90,7 @@ function ScoreTable({ scoreData, selectedPlayerId }) {
           <div className="_text">Total</div>
         </div>
         <div className="table-total-frame-2">
-          <div className="_text">{totalSum}</div>
+          <div className="_text">{scoreData["total"]}</div>
         </div>
       </div>
     </div>
@@ -105,9 +99,7 @@ function ScoreTable({ scoreData, selectedPlayerId }) {
 
 ScoreTable.propTypes = {
   scoreData: PropTypes.shape({
-    d11: PropTypes.string,
-    d12: PropTypes.string,
-    d13: PropTypes.string,
+    total: PropTypes.string,
   }).isRequired,
   selectedPlayerId: PropTypes.string.isRequired,
 };
