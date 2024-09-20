@@ -105,7 +105,8 @@ function PlayerSelector({ scoreData, onBoardChange, onPlayerSelect }) {
 
 // Define prop types
 PlayerSelector.propTypes = {
-  scoreData: PropTypes.object.isRequired,
+  scoreData: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
+    .isRequired,
   onBoardChange: PropTypes.func.isRequired,
   onPlayerSelect: PropTypes.func.isRequired,
 };

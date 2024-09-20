@@ -99,7 +99,7 @@ function ScoreTable({ scoreData, selectedPlayerId }) {
 
 ScoreTable.propTypes = {
   scoreData: PropTypes.shape({
-    total: PropTypes.string,
+    total: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }).isRequired,
   selectedPlayerId: PropTypes.string.isRequired,
 };

@@ -72,7 +72,9 @@ const RowData = ({ index, scoreData, handleChange }) => {
 
 RowData.propTypes = {
   index: PropTypes.number.isRequired,
-  scoreData: PropTypes.objectOf(PropTypes.string).isRequired,
+  scoreData: PropTypes.shape({
+    total: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  }).isRequired,
   handleChange: PropTypes.func.isRequired,
 };
 
