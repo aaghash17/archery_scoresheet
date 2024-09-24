@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import EventName from "../components/Score/EventName";
 import PlayerSelector from "../components/Score/PlayerSelector";
 import PlayerDetails from "../components/Score/PlayerDetails";
@@ -9,6 +10,7 @@ import "../css/Scoredatastyle.css";
 function Score() {
   const [selectedPlayerId, setSelectedPlayerId] = useState("");
   const [scoreData, setScoreData] = useState("");
+  const { access } = useParams();
 
   useEffect(() => {
     // Subscribe to real-time updates
@@ -31,6 +33,9 @@ function Score() {
         <h2>
           <EventName />
         </h2>
+      </div>
+      <div className="text-center">
+        <p>&lt;{access || "No access"}&gt;</p>
       </div>
       <PlayerSelector
         scoreData={scoreData}
