@@ -2,6 +2,7 @@ import { HashRouter as Router, Routes, Route } from "react-router-dom"; // Or us
 import Admin from "./pages/Admin";
 import Score from "./pages/Score";
 import Page404 from "./pages/Page404";
+import View from "./pages/View";
 function App() {
   return (
     <Router>
@@ -12,6 +13,7 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/score" element={<Score />} />
         <Route path="*" element={<Page404 />} />
+        <Route path="/view" element={<View />} />
       </Routes>
     </Router>
   );

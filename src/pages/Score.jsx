@@ -27,7 +27,11 @@ function Score() {
   return (
     <div className="mobile">
       <br></br>
-      <EventName />
+      <div className="header">
+        <h2>
+          <EventName />
+        </h2>
+      </div>
       <PlayerSelector
         scoreData={scoreData}
         onBoardChange={() => {

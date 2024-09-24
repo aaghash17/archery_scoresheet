@@ -13,11 +13,7 @@ function EventName() {
     return () => unsubscribe();
   }, []);
 
-  return (
-    <div className="header">
-      <h2>{eventName}</h2>
-    </div>
-  );
+  return <> {eventName} </>;
 }
 
 export default EventName;
