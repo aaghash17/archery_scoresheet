@@ -5,6 +5,7 @@ import EventName from "../components/Admin/EventName";
 import NoofEnds from "../components/Admin/NoofEnds";
 import ImportCSV from "../components/Admin/ImportCSV";
 import ExportCSV from "../components/Admin/ExportCSV";
+import Access from "../components/Admin/Access";
 import { ref, onValue } from "firebase/database";
 import { db } from "../firebase/firebaseConfig";
 import { useState } from "react";
@@ -56,6 +57,7 @@ function Admin() {
           </div>
         </div>
         <DbTable />
+        <Access />
       </div>
     </>
   );

@@ -1,9 +1,10 @@
-import { ref, onValue, set, update, get } from "firebase/database";
+import { ref, onValue, set, update, get, remove } from "firebase/database";
 import {
   db,
   EVENT_PATH,
   ENDS_PATH,
   SCORE_PATH,
+  ACCESS_PATH,
 } from "../firebase/firebaseConfig";
 
 // Utility function to handle errors
@@ -87,14 +88,16 @@ export const subscribeToScoreData = (callback) => {
 };
 
 export const getScoreData = async (playerId) => {
-  const scoreRef = getFirebaseRef(`${SCORE_PATH}/${playerId}`);
+  const scoreRef = playerId
+    ? getFirebaseRef(`${SCORE_PATH}/${playerId}`)
+    : getFirebaseRef(SCORE_PATH);
 
   try {
     const snapshot = await get(scoreRef); // Use the `get` function to retrieve the data
     if (snapshot.exists()) {
-      return snapshot.val(); // Return the score data for the specific player
+      return snapshot.val(); // Return the score data (either specific player or all)
     } else {
-      return {}; // Return an empty object if no data exists for the player
+      return {}; // Return an empty object if no data exists
     }
   } catch (error) {
     handleFirebaseError(error); // Handle any errors
@@ -113,4 +116,38 @@ export const handleScoreEdit = (id, field, value) => {
     .catch((error) => {
       handleFirebaseError(error);
     });
+};
+
+export const updateAccessData = async (boardsWithGUIDs) => {
+  const accessRef = ref(db, ACCESS_PATH);
+
+  // Clear existing data
+  await remove(accessRef);
+
+  // Prepare updates for new data
+  const updates = {};
+  boardsWithGUIDs.forEach(({ boardNumber, guid }) => {
+    updates[`${guid}`] = { boardNumber };
+  });
+
+  // Update the database with the new board GUIDs
+  await update(accessRef, updates);
+};
+
+export const getAccessData = async (guid) => {
+  const accessRef = guid
+    ? getFirebaseRef(`${ACCESS_PATH}/${guid}`)
+    : getFirebaseRef(ACCESS_PATH);
+
+  try {
+    const snapshot = await get(accessRef); // Use the `get` function to retrieve the data
+    if (snapshot.exists()) {
+      return snapshot.val(); // Return the score data (either specific player or all)
+    } else {
+      return {}; // Return an empty object if no data exists
+    }
+  } catch (error) {
+    handleFirebaseError(error); // Handle any errors
+    return {}; // Return an empty object on error
+  }
 };
