@@ -12,6 +12,7 @@ import { useState } from "react";
 
 function Admin() {
   const [data, setData] = useState([]);
+
   const handleImport = () => {
     // Refetch data from Firebase after import
     const dataRef = ref(db, "data");
@@ -38,26 +39,92 @@ function Admin() {
           </div>
         </nav>
 
-        <div className="container mt-4">
-          <div className="row">
-            <div className="col-md-6 mb-4">
-              <EventName />
-            </div>
-            <div className="col-md-6 mb-4">
-              <NoofEnds />
+        {/* Bootstrap Tabs */}
+        <ul className="nav nav-tabs mt-4" id="myTab" role="tablist">
+          <li className="nav-item" role="presentation">
+            <a
+              className="nav-link active"
+              id="event-tab"
+              data-bs-toggle="tab"
+              href="#event"
+              role="tab"
+              aria-controls="event"
+              aria-selected="true"
+            >
+              Event Details
+            </a>
+          </li>
+          <li className="nav-item" role="presentation">
+            <a
+              className="nav-link"
+              id="db-table-tab"
+              data-bs-toggle="tab"
+              href="#db-table"
+              role="tab"
+              aria-controls="db-table"
+              aria-selected="false"
+            >
+              Database Table
+            </a>
+          </li>
+          <li className="nav-item" role="presentation">
+            <a
+              className="nav-link"
+              id="access-tab"
+              data-bs-toggle="tab"
+              href="#access"
+              role="tab"
+              aria-controls="access"
+              aria-selected="false"
+            >
+              Access Manager
+            </a>
+          </li>
+        </ul>
+
+        <div className="tab-content" id="myTabContent">
+          <div
+            className="tab-pane fade show active"
+            id="event"
+            role="tabpanel"
+            aria-labelledby="event-tab"
+          >
+            <div className="row mt-4">
+              <div className="col-md-6 mb-4">
+                <EventName />
+              </div>
+              <div className="col-md-6 mb-4">
+                <NoofEnds />
+              </div>
             </div>
           </div>
-          <div className="row">
-            <div className="col-md-6 mb-4">
-              <ImportCSV onImport={handleImport} />
+
+          <div
+            className="tab-pane fade"
+            id="db-table"
+            role="tabpanel"
+            aria-labelledby="db-table-tab"
+          >
+            <div className="row mt-4">
+              <div className="col-md-6 mb-4">
+                <ImportCSV onImport={handleImport} />
+              </div>
+              <div className="col-md-6 mb-4">
+                <ExportCSV data={data} />
+              </div>
             </div>
-            <div className="col-md-6 mb-4">
-              <ExportCSV data={data} />
-            </div>
+            <DbTable />
+          </div>
+
+          <div
+            className="tab-pane fade"
+            id="access"
+            role="tabpanel"
+            aria-labelledby="access-tab"
+          >
+            <Access />
           </div>
         </div>
-        <DbTable />
-        <Access />
       </div>
     </>
   );

@@ -58,27 +58,29 @@ function EventName() {
 
   return (
     <div>
-      <h4>Event Name</h4>
-      {error && <div className="alert alert-danger">{error}</div>}
-      {success && <div className="alert alert-success">{success}</div>}
-      <div className="input-group mb-3">
-        <input
-          type="text"
-          className="form-control"
-          name="eventName"
-          value={eventName}
-          onChange={(e) => setEventName(e.target.value)}
-          onKeyDown={handleKeyDown} // Add the keydown handler here
-          required
-        />
-        <button
-          className="btn btn-primary"
-          type="button"
-          onClick={saveData}
-          disabled={loading}
-        >
-          {loading ? "Saving..." : "Save"}
-        </button>
+      <div className="border p-3 rounded">
+        <h4>Event Name</h4>
+        {error && <div className="alert alert-danger">{error}</div>}
+        {success && <div className="alert alert-success">{success}</div>}
+        <div className="input-group mb-3">
+          <input
+            type="text"
+            className="form-control border"
+            name="eventName"
+            value={eventName}
+            onChange={(e) => setEventName(e.target.value)}
+            onKeyDown={handleKeyDown} // Add the keydown handler here
+            required
+          />
+          <button
+            className="btn btn-primary"
+            type="button"
+            onClick={saveData}
+            disabled={loading}
+          >
+            {loading ? "Saving..." : "Save"}
+          </button>
+        </div>
       </div>
     </div>
   );

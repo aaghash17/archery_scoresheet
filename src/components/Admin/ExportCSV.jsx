@@ -91,10 +91,12 @@ const ExportCSV = () => {
 
   return (
     <>
-      <h4>Export Data</h4>
-      <button className="btn btn-success" onClick={handleExport}>
-        Export to CSV
-      </button>
+      <div className="border p-3 rounded">
+        <h4>Export Data</h4>
+        <button className="btn btn-success" onClick={handleExport}>
+          Export to CSV
+        </button>
+      </div>
     </>
   );
 };

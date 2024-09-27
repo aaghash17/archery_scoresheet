@@ -72,27 +72,29 @@ function NoofEnds() {
 
   return (
     <div>
-      <h4>NoofEnds</h4>
-      {error && <div className="alert alert-danger">{error}</div>}
-      {success && <div className="alert alert-success">{success}</div>}
-      <div className="input-group mb-3">
-        <input
-          type="number"
-          className="form-control"
-          name="noOfEnds"
-          value={noOfEnds}
-          onChange={(e) => setNoOfEnds(e.target.value)}
-          onKeyDown={handleKeyDown} // Add the keydown handler here
-          required
-        />
-        <button
-          className="btn btn-primary"
-          type="button"
-          onClick={saveData}
-          disabled={loading}
-        >
-          {loading ? "Saving..." : "Save"}
-        </button>
+      <div className="border p-3 rounded">
+        <h4>NoofEnds</h4>
+        {error && <div className="alert alert-danger">{error}</div>}
+        {success && <div className="alert alert-success">{success}</div>}
+        <div className="input-group mb-3">
+          <input
+            type="number"
+            className="form-control border"
+            name="noOfEnds"
+            value={noOfEnds}
+            onChange={(e) => setNoOfEnds(e.target.value)}
+            onKeyDown={handleKeyDown} // Add the keydown handler here
+            required
+          />
+          <button
+            className="btn btn-primary"
+            type="button"
+            onClick={saveData}
+            disabled={loading}
+          >
+            {loading ? "Saving..." : "Save"}
+          </button>
+        </div>
       </div>
     </div>
   );

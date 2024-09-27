@@ -71,25 +71,27 @@ const ImportCSV = ({ onImport }) => {
 
   return (
     <>
-      <h4>Import Data</h4>
-      <div className="input-group mb-3">
-        <input
-          type="file"
-          accept=".csv"
-          onChange={handleFileChange}
-          className="form-control mb-2"
-          key={filename ? filename : "default"}
-        />
-        <button
-          onClick={handleImport}
-          className="btn btn-primary"
-          type="button"
-        >
-          Import
-        </button>
+      <div className="border p-3 rounded">
+        <h4>Import Data</h4>
+        <div className="input-group mb-3">
+          <input
+            type="file"
+            accept=".csv"
+            onChange={handleFileChange}
+            className="form-control mb-2"
+            key={filename ? filename : "default"}
+          />
+          <button
+            onClick={handleImport}
+            className="btn btn-primary"
+            type="button"
+          >
+            Import
+          </button>
+        </div>
+        {error && <div className="alert alert-danger mt-3">{error}</div>}{" "}
+        {/* Display error message */}
       </div>
-      {error && <div className="alert alert-danger mt-3">{error}</div>}{" "}
-      {/* Display error message */}
     </>
   );
 };
