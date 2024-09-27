@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-function PlayerSelector({ scoreData, onBoardChange, onPlayerSelect }) {
+function PlayerSelector({
+  scoreData,
+  accessBoard,
+  onBoardChange,
+  onPlayerSelect,
+}) {
   const [boards, setBoards] = useState([]);
   const [players, setPlayers] = useState([]);
   const [selectedBoard, setSelectedBoard] = useState(null);
@@ -13,8 +18,14 @@ function PlayerSelector({ scoreData, onBoardChange, onPlayerSelect }) {
       const boardNumbers = Array.from(
         new Set(Object.values(scoreData).map((item) => Number(item.tboard)))
       ).sort((a, b) => a - b);
-      setBoards(boardNumbers);
+
+      if (accessBoard == null || accessBoard === 0) {
+        setBoards(boardNumbers);
+      } else if (boardNumbers.includes(accessBoard)) {
+        setBoards([accessBoard]);
+      }
     }
+
     if (selectedBoard !== null) {
       if (scoreData) {
         const playerList = Object.keys(scoreData)
@@ -30,7 +41,7 @@ function PlayerSelector({ scoreData, onBoardChange, onPlayerSelect }) {
     } else {
       setPlayers([]);
     }
-  }, [scoreData, selectedBoard]);
+  }, [scoreData, selectedBoard, accessBoard]);
 
   // Handle board change
   const handleBoardChange = (event) => {
@@ -106,6 +117,8 @@ function PlayerSelector({ scoreData, onBoardChange, onPlayerSelect }) {
 // Define prop types
 PlayerSelector.propTypes = {
   scoreData: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
+    .isRequired,
+  accessBoard: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     .isRequired,
   onBoardChange: PropTypes.func.isRequired,
   onPlayerSelect: PropTypes.func.isRequired,

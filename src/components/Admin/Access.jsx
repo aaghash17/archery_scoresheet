@@ -52,7 +52,11 @@ function Access() {
 
       const boardNumbers = Array.from(
         new Set(Object.values(scoreData).map((item) => Number(item.tboard)))
-      ).sort((a, b) => a - b);
+      );
+
+      if (boardNumbers.length > 0) {
+        boardNumbers.unshift(0);
+      }
 
       const uniqueGUIDs = new Set();
       const boardsWithGUIDs = boardNumbers.map((board) => {

@@ -11,7 +11,7 @@ function App() {
         <Route path="/" element={<Admin />} />
         {/* For Dev */}
         <Route path="/admin" element={<Admin />} />
-        <Route path="/score/:access?" element={<Score />} />
+        <Route path="/score/:accessGuid?" element={<Score />} />
         <Route path="*" element={<Page404 />} />
         <Route path="/view" element={<View />} />
       </Routes>
