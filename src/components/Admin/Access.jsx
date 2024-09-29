@@ -4,6 +4,8 @@ import {
   getAccessData,
   updateAccessData,
 } from "../../firebase/firebaseService";
+import jsPDF from "jspdf";
+import QRCode from "qrcode";
 
 function generateGUID() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
@@ -80,6 +82,38 @@ function Access() {
     }
   }, []);
 
+  const handleGeneratePDF = useCallback(async () => {
+    const doc = new jsPDF();
+
+    for (const [index, { boardNumber, guid }] of boardsWithGUID.entries()) {
+      const url = `${BASE_URL}/archery_scoresheet/#/score/${guid}`;
+      const qrCodeDataUrl = await QRCode.toDataURL(url);
+
+      // Add QR code to PDF (size increased and centered)
+      const qrCodeSize = 100; // Increase size as needed
+      const x = (doc.internal.pageSize.getWidth() - qrCodeSize) / 2; // Center horizontally
+      const y = (doc.internal.pageSize.getHeight() - qrCodeSize) / 2; // Center vertically
+
+      doc.addImage(qrCodeDataUrl, "PNG", x, y, qrCodeSize, qrCodeSize);
+
+      // Add board number below the QR code
+      doc.setFontSize(16);
+      doc.text(
+        `Board Number: ${boardNumber}`,
+        doc.internal.pageSize.getWidth() / 2,
+        y + qrCodeSize + 10,
+        { align: "center" }
+      );
+
+      // Add a new page only if this is not the last item
+      if (index < boardsWithGUID.length - 1) {
+        doc.addPage(); // Add a new page for the next QR code
+      }
+    }
+
+    doc.save("access_links.pdf");
+  }, [boardsWithGUID, BASE_URL]);
+
   return (
     <div className="container mt-4">
       <h4>Access Manage</h4>
@@ -90,6 +124,13 @@ function Access() {
           disabled={loading}
         >
           {loading ? "Generating..." : "Generate Access"}
+        </button>
+        <button
+          className="btn btn-secondary"
+          onClick={handleGeneratePDF}
+          disabled={boardsWithGUID.length === 0}
+        >
+          Generate PDF
         </button>
       </div>
       {loading && <div className="alert alert-info">Loading...</div>}
