@@ -90,6 +90,11 @@ function Score() {
               <ScoreTable
                 scoreData={scoreData[selectedPlayerId]}
                 selectedPlayerId={selectedPlayerId}
+                accessBoard={
+                  accessData.boardNumber !== undefined
+                    ? accessData.boardNumber
+                    : null
+                }
               />
             </>
           )}

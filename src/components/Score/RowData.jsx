@@ -1,44 +1,51 @@
 import PropTypes from "prop-types";
 import { useMemo } from "react";
 
-// Component to render an individual input cell
-const InputCell = ({ field, value, onChange }) => (
-  <div className={`c-${field.slice(-1)}`}>
-    <input
-      type="text"
-      value={value || ""}
-      onChange={(e) => onChange(field, e)}
-    />
-  </div>
-);
+const InputCell = ({ field, value, onChange, accessBoard }) => {
+  const isDisabled =
+    accessBoard === null ||
+    (typeof accessBoard === "number" && accessBoard !== 0 && value);
 
-// Define prop types for InputCell
+  return (
+    <div className={`c-${field.slice(-1)}`}>
+      <input
+        type="text"
+        value={value || ""}
+        onChange={(e) => onChange(field, e)}
+        disabled={isDisabled}
+        aria-label={`Input for ${field}`}
+      />
+    </div>
+  );
+};
+
 InputCell.propTypes = {
   field: PropTypes.string.isRequired,
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
+  accessBoard: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.null,
+  ]),
 };
 
-// Component to render the sum cell
 const SumCell = ({ sum }) => (
   <div className="c-sum">
     <div className="_text">{sum !== null ? sum : ""}</div>
   </div>
 );
 
-// Define prop types for SumCell
 SumCell.propTypes = {
   sum: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
-// Main RowData component
-const RowData = ({ index, scoreData, handleChange }) => {
+const RowData = ({ index, accessBoard, scoreData, handleChange }) => {
   const fieldset = useMemo(
     () => [`d${index}1`, `d${index}2`, `d${index}3`],
     [index]
   );
 
-  // Calculate sum of the fields
   const calculateSum = useMemo(() => {
     const totalSum = fieldset.reduce((sum, field) => {
       const value = scoreData[field];
@@ -49,7 +56,7 @@ const RowData = ({ index, scoreData, handleChange }) => {
       return isNaN(numValue) ? sum : sum + numValue;
     }, 0);
 
-    return totalSum > 0 ? totalSum : ""; // Return an empty string if the sum is 0
+    return totalSum > 0 ? totalSum : "";
   }, [fieldset, scoreData]);
 
   return (
@@ -63,6 +70,7 @@ const RowData = ({ index, scoreData, handleChange }) => {
           field={field}
           value={scoreData[field]}
           onChange={handleChange}
+          accessBoard={accessBoard}
         />
       ))}
       <SumCell sum={calculateSum !== "" ? calculateSum.toString() : ""} />
@@ -72,6 +80,11 @@ const RowData = ({ index, scoreData, handleChange }) => {
 
 RowData.propTypes = {
   index: PropTypes.number.isRequired,
+  accessBoard: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.null,
+  ]).isRequired,
   scoreData: PropTypes.shape({
     total: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }).isRequired,

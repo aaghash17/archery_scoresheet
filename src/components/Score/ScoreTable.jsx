@@ -34,7 +34,7 @@ const calculateTotalSum = (scoreData, noOfEnds) => {
   }, 0);
 };
 
-function ScoreTable({ scoreData, selectedPlayerId }) {
+function ScoreTable({ scoreData, selectedPlayerId, accessBoard }) {
   const [noOfEnds, setNoOfEnds] = useState("");
 
   useEffect(() => {
@@ -80,6 +80,7 @@ function ScoreTable({ scoreData, selectedPlayerId }) {
           <RowData
             key={index + 1}
             index={index + 1}
+            accessBoard={accessBoard}
             scoreData={scoreData}
             handleChange={handleChange}
           />
@@ -101,6 +102,11 @@ ScoreTable.propTypes = {
   scoreData: PropTypes.shape({
     total: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }).isRequired,
+  accessBoard: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.null,
+  ]).isRequired,
   selectedPlayerId: PropTypes.string.isRequired,
 };
 
