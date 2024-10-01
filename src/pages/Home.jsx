@@ -16,10 +16,16 @@ const HomePage = () => {
             style={{ maxWidth: "150px" }}
           />
           <div>
-            <a href="/#/view" className="btn btn-primary mx-2">
+            <a
+              href="/archery_scoresheet/#/view"
+              className="btn btn-primary mx-2"
+            >
               View Table
             </a>
-            <a href="/#/score" className="btn btn-secondary mx-2">
+            <a
+              href="/archery_scoresheet/#/score"
+              className="btn btn-secondary mx-2"
+            >
               Score Table
             </a>
           </div>
