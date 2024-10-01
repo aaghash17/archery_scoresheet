@@ -112,10 +112,10 @@ function Admin() {
             aria-labelledby="db-table-tab"
           >
             <div className="row mt-4">
-              <div className="col-md-6 mb-4">
+              <div className="col-md-6 mb-4 d-flex align-items-stretch">
                 <ImportCSV onImport={handleImport} />
               </div>
-              <div className="col-md-6 mb-4">
+              <div className="col-md-6 mb-4 d-flex align-items-stretch">
                 <ExportCSV data={data} />
               </div>
             </div>

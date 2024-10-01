@@ -71,7 +71,7 @@ const ImportCSV = ({ onImport }) => {
 
   return (
     <>
-      <div className="border p-3 rounded">
+      <div className="border p-3 rounded w-100">
         <h4>Import Data</h4>
         <div className="input-group mb-3">
           <input

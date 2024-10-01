@@ -91,7 +91,7 @@ const ExportCSV = () => {
 
   return (
     <>
-      <div className="border p-3 rounded">
+      <div className="border p-3 rounded w-100">
         <h4>Export Data</h4>
         <button className="btn btn-success" onClick={handleExport}>
           Export to CSV
