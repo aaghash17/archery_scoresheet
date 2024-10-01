@@ -69,11 +69,6 @@ function Score() {
               <EventName />
             </h2>
           </div>
-          <div className="text-center">
-            <p>
-              &lt;{"boardNumber:" + accessData.boardNumber || "No access"}&gt;
-            </p>
-          </div>
           <PlayerSelector
             scoreData={scoreData}
             accessBoard={

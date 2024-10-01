@@ -1,0 +1,22 @@
+.background-image {
+  background-image: url("../assets/homebg.jpg"); /* Adjust path based on your file structure */
+  background-size: cover; /* Ensures the image covers the whole area */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  position: relative; /* Required for positioning the overlay */
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Adjust color and opacity here */
+  z-index: 1; /* Ensures the overlay is above the background */
+}
+
+.content {
+  position: relative; /* Ensures content is above the overlay */
+  z-index: 2; /* Content should be above the overlay */
+}

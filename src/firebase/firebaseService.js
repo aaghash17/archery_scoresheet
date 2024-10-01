@@ -5,6 +5,7 @@ import {
   ENDS_PATH,
   SCORE_PATH,
   ACCESS_PATH,
+  VIEW_PATH,
 } from "../firebase/firebaseConfig";
 
 // Utility function to handle errors
@@ -68,6 +69,27 @@ export const subscribeToNoofEnds = (callback) => {
     }
   );
   return unsubscribe;
+};
+
+// Function to set number of view table data
+export const setViewTableData = async (length, time) => {
+  try {
+    const viewTableRef = getFirebaseRef(VIEW_PATH);
+    await set(viewTableRef, { length, time });
+  } catch (error) {
+    handleFirebaseError(error);
+  }
+};
+
+// Subscribe to view table data
+export const subscribeToViewTableData = (callback) => {
+  const viewTableRef = getFirebaseRef(VIEW_PATH);
+  const unsubscribe = onValue(viewTableRef, (snapshot) => {
+    const data = snapshot.val();
+    callback(data);
+  });
+
+  return unsubscribe; // Return unsubscribe function
 };
 
 // Function to subscribe to score data updates

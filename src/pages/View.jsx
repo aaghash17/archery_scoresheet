@@ -1,17 +1,24 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import { useEffect, useState } from "react";
-import { subscribeToScoreData } from "../firebase/firebaseService";
+import {
+  subscribeToScoreData,
+  subscribeToViewTableData,
+} from "../firebase/firebaseService";
 import EventName from "../components/Score/EventName";
-import "../css/viewStyles.css"; // Import the scoped CSS file
+import "../css/viewStyles.css";
+import { PacmanLoader } from "react-spinners";
 
 function View() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [displayLength, setDisplayLength] = useState(10);
+  const [displayTime, setDisplayTime] = useState(5000); // time in milliseconds
 
   useEffect(() => {
-    const unsubscribe = subscribeToScoreData(
+    const unsubscribeScore = subscribeToScoreData(
       (scoreData) => {
         if (scoreData) {
           const scoreArray = Object.values(scoreData);
@@ -25,11 +32,18 @@ function View() {
         console.error("Error fetching score data:", error);
         setData([]);
         setLoading(false);
+        setError("Failed to get score data.");
       }
     );
 
+    const unsubscribeViewData = subscribeToViewTableData((newData) => {
+      setDisplayLength(newData.length || 10); // Default to 10 if no data
+      setDisplayTime(newData.time * 1000 || 5000); // Default to 5000 ms if no data
+    });
+
     return () => {
-      unsubscribe && unsubscribe();
+      unsubscribeScore && unsubscribeScore();
+      unsubscribeViewData && unsubscribeViewData();
     };
   }, []);
 
@@ -38,16 +52,17 @@ function View() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex(
-        (prevIndex) => (prevIndex + 1) % Math.ceil(sortedData.length / 10)
+        (prevIndex) =>
+          (prevIndex + 1) % Math.ceil(sortedData.length / displayLength)
       );
-    }, 5000);
+    }, displayTime);
 
     return () => clearInterval(interval);
-  }, [sortedData.length]);
+  }, [sortedData.length, displayLength, displayTime]);
 
   const scoresToDisplay = sortedData.slice(
-    currentIndex * 10,
-    currentIndex * 10 + 10
+    currentIndex * displayLength,
+    currentIndex * displayLength + displayLength
   );
 
   return (
@@ -58,18 +73,19 @@ function View() {
           <span className="navbar-brand mb-0 h1" style={{ fontSize: "2rem" }}>
             <EventName />
             <br />
-            <br />
             SCORESHEET
           </span>
           <br />
         </div>
       </nav>
-      <div className="pt-5"></div>
-      <div className="px-5"></div>
-
+      <br />
       <div className="container">
         {loading ? (
-          <div className="text-center">Loading scores...</div>
+          <div className="d-flex justify-content-center">
+            <PacmanLoader color="#0d6efd" />
+          </div>
+        ) : error ? (
+          <div className="alert alert-danger text-center">{error}</div>
         ) : (
           <table className="content-table">
             <thead>
@@ -104,7 +120,7 @@ function View() {
                 )
               ) : (
                 <tr>
-                  <td colSpan="7" className="text-center">
+                  <td colSpan="6" className="text-center">
                     No score data available.
                   </td>
                 </tr>

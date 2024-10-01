@@ -6,6 +6,7 @@ import NoofEnds from "../components/Admin/NoofEnds";
 import ImportCSV from "../components/Admin/ImportCSV";
 import ExportCSV from "../components/Admin/ExportCSV";
 import Access from "../components/Admin/Access";
+import ViewTable from "../components/Admin/ViewTable";
 import { ref, onValue } from "firebase/database";
 import { db } from "../firebase/firebaseConfig";
 import { useState } from "react";
@@ -95,6 +96,11 @@ function Admin() {
               </div>
               <div className="col-md-6 mb-4">
                 <NoofEnds />
+              </div>
+            </div>
+            <div className="row mt-4">
+              <div className="col-md-6 mb-4">
+                <ViewTable />
               </div>
             </div>
           </div>
