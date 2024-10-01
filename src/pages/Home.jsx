@@ -9,6 +9,7 @@ const HomePage = () => {
       <div className="content text-center flex-grow-1 d-flex justify-content-center align-items-center">
         <div>
           <h1 className="mb-4 text-white">Welcome to Our Website!</h1>
+          <h1 className="mb-4 text-white">Archery ScoreSheet</h1>
           <img
             src={logo} // Update with your logo file name
             alt="Logo"
